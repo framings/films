@@ -189,9 +189,8 @@ The second file, genome-tags.csv, provides the tag descriptions for the tag IDs 
 
 > tagId, tag
 
-The tagId values generations occurs during data set exports, therefore they may vary from version to version of the MovieLens data sets.
-
-Please include the following citation if referencing tag genome data:
+The tagId values generations occurs during data set exports, therefore they may vary from version to version of the 
+MovieLens data sets.  Please include the following citation if referencing tag genome data:
 
 > Jesse Vig, Shilad Sen, and John Riedl. 2012. The Tag Genome: Encoding Community Knowledge to Support Novel Interaction. ACM Trans. Interact. Intell. Syst. 2, 3: 13:1–13:44. https://doi.org/10.1145/2362394.2362395
 
