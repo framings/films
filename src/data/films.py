@@ -63,6 +63,6 @@ class Films:
 
         movies = self.__movies()
         ratings = self.__ratings()
-
         frame = ratings.merge(movies, on='movieId', how='left')
-        self.logger.info(frame.head())
+
+        return frame
