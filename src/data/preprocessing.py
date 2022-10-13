@@ -14,14 +14,25 @@ class Preprocessing:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
-    def __summary(self, frame: pd.DataFrame):
+    def __frequency(self, data: pd.DataFrame):
 
-        summary = frame['movieId'].value_counts().rename('frequency').to_frame()
-        summary.reset_index(drop=False, inplace=True)
-        summary.rename(columns={'index': 'movieId'}, inplace=True)
-        self.logger.info(summary)
+        frequency = data['movieId'].value_counts().rename('frequency').to_frame()
+        frequency.reset_index(drop=False, inplace=True)
+        frequency.rename(columns={'index': 'movieId'}, inplace=True)
+        self.logger.info(frequency)
 
-        return summary
+        return frequency
+
+    def __reduce(self, data: pd.DataFrame, frequency: pd.DataFrame, limit: int):
+
+        # focus on films that have at least <limit> number of ratings
+        frequency = frequency.copy().loc[frequency['frequency'] >= limit, :]
+        self.logger.info(f'The number of films that have at least {limit} ratings: {frequency.shape}')
+
+        # hence
+        reduced = data.copy().loc[data['movieId'].isin(frequency['movieId']), :]
+
+        return reduced
 
     def __restructure(self, data: pd.DataFrame):
 
@@ -34,15 +45,12 @@ class Preprocessing:
         self.logger.info(f'The initial number of observations: {frame.shape}')
 
         # the number of ratings per film
-        summary = self.__summary(frame=frame)
-        self.logger.info(f'The number of distinct films: {summary.shape}')
+        frequency = self.__frequency(data=frame)
+        self.logger.info(f'The number of distinct films: {frequency.shape}')
 
-        # focus on films that have at list <limit> number of ratings
-        summary = summary.copy().loc[summary['frequency'] >= limit, :]
-        self.logger.info(f'The number of films that have at least {limit} ratings: {summary.shape}')
+        # focus on films that have at least <limit> number of ratings
+        reduced = self.__reduce(data=frame, frequency=frequency, limit=limit)
+        self.logger.info(f'Hence, the final number of observations: {reduced.shape}')
 
-        # hence
-        data = frame.copy().loc[frame['movieId'].isin(summary['movieId']), :]
-        self.logger.info(f'Hence, the final number of observations: {data.shape}')
-
-        self.__restructure(data=data)
+        # restructure
+        self.__restructure(data=reduced)
