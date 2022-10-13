@@ -23,6 +23,11 @@ class Preprocessing:
 
         return summary
 
+    def __restructure(self, data: pd.DataFrame):
+
+        sampled = data.sample(frac=1, replace=False, axis=0, random_state=5)
+        self.logger.info(sampled.head())
+
     def exc(self, frame: pd.DataFrame, limit: int):
 
         # the number of film rating records
@@ -39,3 +44,5 @@ class Preprocessing:
         # hence
         data = frame.copy().loc[frame['movieId'].isin(summary['movieId']), :]
         self.logger.info(f'Hence, the final number of observations: {data.shape}')
+
+        self.__restructure(data=data)
