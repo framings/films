@@ -19,7 +19,7 @@ class Films:
 
         self.data_directory = config.Config().data_directory
 
-        logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
+        logging.basicConfig(level=logging.WARNING, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
