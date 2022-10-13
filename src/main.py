@@ -16,6 +16,7 @@ def main():
     logger.info(preprocessed.head())
 
     # algorithms
+    src.algorithms.replay.Replay(data=preprocessed).exc()
 
 
 if __name__ == '__main__':
@@ -33,5 +34,6 @@ if __name__ == '__main__':
     # functions
     import src.data.films
     import src.data.preprocessing
+    import src.algorithms.replay
 
     main()
