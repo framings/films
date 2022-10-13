@@ -24,29 +24,47 @@ class Replay:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
-    def score(self, history: pd.DataFrame, boundary: int, recommendations):
+    def score(self, history: pd.DataFrame, boundary: int, recommendations: np.ndarray):
 
         actions = self.data[boundary:(boundary + self.batch_size)]
-        self.logger.info(actions.head())
+        self.logger.info(actions.shape)
+
+        actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
+        self.logger.info(actions.shape)
+
+        actions['scoring_round'] = boundary
+        history = pd.concat([history, actions], axis=1)
+        action_score = actions[['movieId', 'liked']]
+
+        return history, action_score
 
     def exc(self):
 
-        print(self.data.dtypes.to_dict())
-
+        # the empty history data frame
+        # scoring_round?
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
-        self.logger.info(history.info())
 
-        recommendations: np.ndarray = np.random.choice(a=self.data['movieId'].unique(), size=self.slate_size, replace=False)
-        self.logger.info(type(recommendations))
-
-        self.score(history=history, boundary=0, recommendations=recommendations)
+        # rewards
+        rewards = []
 
         for index in range((self.data.shape[0] // self.batch_size)):
 
             if index > 9:
                 break
 
-            self.logger.info(f'index: {index}')
+            # the lower boundary
             boundary = index * self.batch_size
-            self.logger.info(boundary)
+
+            # a temporary recommendation function
+            recommendations: np.ndarray = np.random.choice(a=self.data['movieId'].unique(), size=self.slate_size, replace=False)
+            self.logger.info(type(recommendations))
+
+            # hence
+            history, action_score = self.score(history=history, boundary=boundary, recommendations=recommendations)
+            if action_score is not None:
+                values = action_score['liked'].tolist()
+                rewards.extend(values)
+
+            # thus far
+            self.logger.info(np.cumsum(rewards))
