@@ -67,8 +67,10 @@ class Preprocessing:
 
         # restructure
         restructured = self.__restructure(data=reduced)
-        self.logger.info(restructured.head())
+        self.logger.info(restructured.info())
 
         # extend
         extended = self.__extend(data=restructured)
-        self.logger.info(extended.head())
+        self.logger.info(extended.info())
+
+        return extended
