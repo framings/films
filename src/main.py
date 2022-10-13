@@ -12,7 +12,8 @@ def main():
     logger.info(frame.info())
 
     # preprocessing
-    src.data.preprocessing.Preprocessing().exc(frame=frame, limit=20000)
+    preprocessed = src.data.preprocessing.Preprocessing().exc(frame=frame, limit=20000)
+    logger.info(preprocessed.head())
 
 
 if __name__ == '__main__':
