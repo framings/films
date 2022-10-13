@@ -27,10 +27,7 @@ class Replay:
     def score(self, history: pd.DataFrame, boundary: int, recommendations: np.ndarray):
 
         actions = self.data[boundary:(boundary + self.batch_size)]
-        self.logger.info(actions.shape)
-
         actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
-        self.logger.info(actions.shape)
 
         actions['scoring_round'] = boundary
         history = pd.concat([history, actions], axis=1)
@@ -50,7 +47,7 @@ class Replay:
 
         for index in range((self.data.shape[0] // self.batch_size)):
 
-            if index > 9:
+            if index > 27:
                 break
 
             # the lower boundary
@@ -58,7 +55,7 @@ class Replay:
 
             # a temporary recommendation function
             recommendations: np.ndarray = np.random.choice(a=self.data['movieId'].unique(), size=self.slate_size, replace=False)
-            self.logger.info(type(recommendations))
+            self.logger.info(recommendations)
 
             # hence
             history, action_score = self.score(history=history, boundary=boundary, recommendations=recommendations)
