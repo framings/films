@@ -52,17 +52,17 @@ class Preprocessing:
 
         return extended
 
-    def exc(self, frame: pd.DataFrame, limit: int):
+    def exc(self, data: pd.DataFrame, limit: int):
 
         # the number of film rating records
-        self.logger.info(f'The initial number of observations: {frame.shape}')
+        self.logger.info(f'The initial number of observations: {data.shape}')
 
         # the number of ratings per film
-        frequency = self.__frequency(data=frame)
+        frequency = self.__frequency(data=data)
         self.logger.info(f'The number of distinct films: {frequency.shape}')
 
         # focus on films that have at least <limit> number of ratings
-        reduced = self.__reduce(data=frame, frequency=frequency, limit=limit)
+        reduced = self.__reduce(data=data, frequency=frequency, limit=limit)
         self.logger.info(f'Hence, the final number of observations: {reduced.shape}')
 
         # restructure
