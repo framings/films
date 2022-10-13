@@ -1,6 +1,7 @@
 import logging
 
 import pandas as pd
+import numpy as np
 
 
 class Preprocessing:
@@ -34,10 +35,22 @@ class Preprocessing:
 
         return reduced
 
-    def __restructure(self, data: pd.DataFrame):
+    @staticmethod
+    def __restructure(data: pd.DataFrame):
 
-        sampled = data.sample(frac=1, replace=False, axis=0, random_state=5)
-        self.logger.info(sampled.head())
+        restructured = data.sample(frac=1, replace=False, axis=0, random_state=5)
+        restructured['t'] = np.arange(stop=restructured.shape[0])
+        restructured.index = restructured['t']
+        
+        return restructured
+
+    @staticmethod
+    def __extend(data: pd.DataFrame):
+
+        extended = data.copy()
+        extended['liked'] = np.where(extended['rating'] < 4.5, 0, 1)
+
+        return extended
 
     def exc(self, frame: pd.DataFrame, limit: int):
 
@@ -53,4 +66,9 @@ class Preprocessing:
         self.logger.info(f'Hence, the final number of observations: {reduced.shape}')
 
         # restructure
-        self.__restructure(data=reduced)
+        restructured = self.__restructure(data=reduced)
+        self.logger.info(restructured.head())
+
+        # extend
+        extended = self.__extend(data=restructured)
+        self.logger.info(extended.head())
