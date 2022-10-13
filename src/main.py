@@ -7,8 +7,12 @@ def main():
 
     logger.info('films')
 
-    # data set previews
-    src.data.films.Films().exc()
+    # the data
+    frame = src.data.films.Films().exc()
+    logger.info(frame.info())
+
+    # counts
+    src.data.preprocessing.Preprocessing().exc(frame=frame)
 
 
 if __name__ == '__main__':
@@ -25,5 +29,6 @@ if __name__ == '__main__':
 
     # functions
     import src.data.films
+    import src.data.preprocessing
 
     main()
