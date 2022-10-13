@@ -38,15 +38,31 @@ class Films:
 
         return frame
 
-    def exc(self):
+    def __movies(self) -> pd.DataFrame:
 
-        ratings = self.__read(pathway='ratings.csv')
-        self.logger.info(ratings.info())
-
+        # the data
         movies = self.__read(pathway='movies.csv')
         self.logger.info(movies.info())
 
-        links = self.__read(pathway='links.csv')
-        self.logger.info(links.info())
+        # one-hot-encoding of the <genres> field - each element of the field becomes a column
+        movies = movies.join(movies.genres.str.get_dummies().astype(bool))
+        movies.drop(columns='genres', inplace=True)
+        self.logger.info(movies.info())
 
-        print(movies.join(movies.genres.str.get_dummies().astype(bool)).head())
+        return movies
+
+    def __ratings(self):
+
+        # the data
+        ratings = self.__read(pathway='ratings.csv')
+        self.logger.info(ratings.info())
+
+        return ratings
+
+    def exc(self):
+
+        movies = self.__movies()
+        ratings = self.__ratings()
+
+        frame = ratings.merge(movies, on='movieId', how='left')
+        self.logger.info(frame.head())
