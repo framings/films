@@ -8,11 +8,11 @@ def main():
     logger.info('films')
 
     # the data
-    frame = src.data.films.Films().exc()
-    logger.info(frame.info())
+    data = src.data.films.Films().exc()
+    logger.info(data.info())
 
     # preprocessing
-    preprocessed = src.data.preprocessing.Preprocessing().exc(frame=frame, limit=20000)
+    preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=20000)
     logger.info(preprocessed.head())
 
 
