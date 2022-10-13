@@ -11,8 +11,8 @@ def main():
     frame = src.data.films.Films().exc()
     logger.info(frame.info())
 
-    # counts
-    src.data.preprocessing.Preprocessing().exc(frame=frame)
+    # preprocessing
+    src.data.preprocessing.Preprocessing().exc(frame=frame, limit=20000)
 
 
 if __name__ == '__main__':
