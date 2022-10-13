@@ -25,14 +25,17 @@ class Preprocessing:
 
     def exc(self, frame: pd.DataFrame, limit: int):
 
+        # the number of film rating records
+        self.logger.info(f'The initial number of observations: {frame.shape}')
+
         # the number of ratings per film
         summary = self.__summary(frame=frame)
-        self.logger.info(summary.shape)
+        self.logger.info(f'The number of distinct films: {summary.shape}')
 
         # focus on films that have at list <limit> number of ratings
         summary = summary.copy().loc[summary['frequency'] >= limit, :]
-        self.logger.info(summary.shape)
+        self.logger.info(f'The number of films that have at least {limit} ratings: {summary.shape}')
 
         # hence
         data = frame.copy().loc[frame['movieId'].isin(summary['movieId']), :]
-        self.logger.info(f'data: {data.shape}')
+        self.logger.info(f'Hence, the final number of observations: {data.shape}')
