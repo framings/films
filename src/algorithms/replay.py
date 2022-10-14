@@ -65,7 +65,9 @@ class Replay:
             boundary = index * self.batch_size
 
             # a temporary recommendation function
-            recommendations: np.ndarray = np.random.choice(a=self.data['movieId'].unique(), size=self.slate_size, replace=False)
+            recommendations: np.ndarray = np.random.choice(a=self.data['movieId'].unique(),
+                                                           size=self.slate_size,
+                                                           replace=False)
             self.logger.info(recommendations)
 
             # hence
@@ -78,4 +80,4 @@ class Replay:
         cumulative = np.cumsum(rewards)
         running = np.asarray(pd.Series(rewards).rolling(window=50).mean())
 
-        self.Rewards(cumulative=cumulative, running=running)
+        return self.Rewards(cumulative=cumulative, running=running)
