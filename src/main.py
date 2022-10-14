@@ -16,7 +16,9 @@ def main():
     logger.info(preprocessed.head())
 
     # algorithms
-    src.algorithms.replay.Replay(data=preprocessed).exc()
+    scores = src.algorithms.replay.Replay(data=preprocessed).exc()
+    logger.info(scores.running)
+    logger.info(scores.cumulative)
 
 
 if __name__ == '__main__':
