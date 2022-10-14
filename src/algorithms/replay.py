@@ -15,7 +15,7 @@ class Replay:
 
     def __init__(self, data: pd.DataFrame):
         """
-        
+
         :param data:
         """
 
