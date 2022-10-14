@@ -78,7 +78,7 @@ class Replay:
 
         # metrics
         self.logger.info(f'Rewards: {rewards}')
-        cumulative = np.cumsum(rewards)
+        cumulative = np.cumsum(rewards, dtype='float64')
         running = np.asarray(pd.Series(rewards, dtype='float64').rolling(window=50).mean())
 
         return self.Rewards(cumulative=cumulative, running=running)
