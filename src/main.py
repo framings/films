@@ -12,7 +12,7 @@ def main():
     logger.info(data.info())
 
     # preprocessing
-    preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=20000)
+    preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=1500)
     logger.info(preprocessed.head())
 
     # algorithms
