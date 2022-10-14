@@ -14,6 +14,7 @@ class Preprocessing:
         logging.basicConfig(level=logging.ERROR, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.WARNING)
 
     def __frequency(self, data: pd.DataFrame):
 
