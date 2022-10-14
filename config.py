@@ -18,4 +18,4 @@ class Config:
         self.batch_size = 10
 
         # running average window
-        self.average_window = 50
+        self.average_window = 5
