@@ -19,9 +19,11 @@ class Films:
 
         self.data_directory = config.Config().data_directory
 
+        # logging
         logging.basicConfig(level=logging.ERROR, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.WARNING)
 
     def __read(self, pathway: str) -> pd.DataFrame:
         """
