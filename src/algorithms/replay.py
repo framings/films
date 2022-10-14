@@ -1,6 +1,7 @@
 """
 Module: replay
 """
+import collections
 import logging
 import pandas as pd
 import numpy as np
@@ -30,6 +31,9 @@ class Replay:
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
+
+        # rewards
+        self.Rewards = collections.namedtuple(typename='Rewards', field_names=['cumulative', 'running'])
 
     def score(self, history: pd.DataFrame, boundary: int, recommendations: np.ndarray):
 
@@ -71,4 +75,7 @@ class Replay:
                 rewards.extend(values)
 
             # thus far
-            self.logger.info(np.cumsum(rewards))
+            cumulative = np.cumsum(rewards)
+            running = np.asarray(pd.Series(rewards).rolling(window=50).mean())
+
+        self.Rewards(cumulative=cumulative, running=running)
