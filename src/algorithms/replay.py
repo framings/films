@@ -74,8 +74,8 @@ class Replay:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
 
-            # thus far
-            cumulative = np.cumsum(rewards)
-            running = np.asarray(pd.Series(rewards).rolling(window=50).mean())
+        # metrics
+        cumulative = np.cumsum(rewards)
+        running = np.asarray(pd.Series(rewards).rolling(window=50).mean())
 
         self.Rewards(cumulative=cumulative, running=running)
