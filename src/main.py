@@ -17,8 +17,8 @@ def main():
 
     # algorithms
     scores = src.algorithms.replay.Replay(data=preprocessed).exc()
-    logger.info(scores.running)
-    logger.info(scores.cumulative)
+    logger.info(f'Running Average Scores: {scores.running}')
+    logger.info(f'Cumulative Sums: {scores.cumulative}')
 
 
 if __name__ == '__main__':
