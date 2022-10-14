@@ -26,6 +26,7 @@ class Replay:
         configurations = config.Config()
         self.batch_size = configurations.batch_size
         self.slate_size = configurations.slate_size
+        self.average_window = configurations.average_window
 
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -79,6 +80,6 @@ class Replay:
         # metrics
         self.logger.info(f'Rewards: {rewards}')
         cumulative = np.cumsum(rewards, dtype='float64')
-        running = np.asarray(pd.Series(rewards, dtype='float64').rolling(window=50).mean())
+        running = np.asarray(pd.Series(rewards, dtype='float64').rolling(window=self.average_window).mean())
 
         return self.Rewards(cumulative=cumulative, running=running)
