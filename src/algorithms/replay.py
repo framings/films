@@ -59,7 +59,7 @@ class Replay:
 
         for index in range((self.data.shape[0] // self.batch_size)):
 
-            if index > 999:
+            if index > 499:
                 break
 
             # the lower boundary
@@ -78,8 +78,12 @@ class Replay:
                 rewards.extend(values)
 
         # metrics
-        self.logger.info(f'Rewards: {rewards}')
+        self.logger.info(f'Rewards: {np.array(rewards)}')
+
         cumulative = np.cumsum(rewards, dtype='float64')
-        running = np.asarray(pd.Series(rewards, dtype='float64').rolling(window=self.average_window).mean())
+
+        running = cumulative
+        running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
+        running = running[self.average_window - 1:] / self.average_window
 
         return self.Rewards(cumulative=cumulative, running=running)
