@@ -1,3 +1,6 @@
+"""
+Module: replay
+"""
 import logging
 import pandas as pd
 import numpy as np
@@ -6,10 +9,14 @@ import config
 
 
 class Replay:
+    """
+    Class: Replay
+    """
 
     def __init__(self, data: pd.DataFrame):
         """
-
+        
+        :param data:
         """
 
         self.data = data
