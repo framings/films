@@ -68,16 +68,16 @@ class Replay:
             recommendations: np.ndarray = np.random.choice(a=self.data['movieId'].unique(),
                                                            size=self.slate_size,
                                                            replace=False)
-            self.logger.info(recommendations)
 
             # hence
             history, action_score = self.score(history=history, boundary=boundary, recommendations=recommendations)
+            self.logger.info(f'Action Score: {action_score}')
             if action_score is not None:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
 
         # metrics
         cumulative = np.cumsum(rewards)
-        running = np.asarray(pd.Series(rewards).rolling(window=50).mean())
+        running = np.asarray(pd.Series(rewards, dtype='float64').rolling(window=50).mean())
 
         return self.Rewards(cumulative=cumulative, running=running)
