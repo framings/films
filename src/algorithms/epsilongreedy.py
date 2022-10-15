@@ -52,12 +52,9 @@ class EpsilonGreedy:
 
         # the likelihood of an explore option is self.epsilon
         explore = np.random.binomial(n=1, p=self.epsilon, size=1)
-        self.logger.info(f'Explore: {explore}')
-
         if explore == 1 or excerpt.shape[0] == 0:
             # a temporary recommendation function
             recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
-            self.logger.info(f'Recommendations: {recommendations}')
         else:
             # exploit
             scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
@@ -96,6 +93,7 @@ class EpsilonGreedy:
 
         for index in range((self.data.shape[0] // self.batch_size)):
 
+            # temporary break point
             if index > 99999:
                 break
 
@@ -112,7 +110,6 @@ class EpsilonGreedy:
         # metrics
         cumulative = np.cumsum(rewards, dtype='float64')
         running = cumulative
-        self.logger.info(running[self.average_window:])
         running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
         running = running[self.average_window - 1:] / self.average_window
 
