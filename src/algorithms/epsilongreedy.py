@@ -23,6 +23,7 @@ class EpsilonGreedy:
         configurations = config.Config()
         self.slate_size = configurations.slate_size
         self.batch_size = configurations.batch_size
+        self.average_window = configurations.average_window
 
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -83,6 +84,18 @@ class EpsilonGreedy:
             # hence
             boundary = index * self.batch_size
             history, action_score = self.score(history=history, boundary=boundary)
+            if action_score is not None:
+                values = action_score['liked'].tolist()
+                rewards.extend(values)
 
+        # history
+        self.logger.info(f'History:\n {history}')
 
+        # metrics
+        cumulative = np.cumsum(rewards, dtype='float64')
+        running = cumulative
+        self.logger.info(running[self.average_window:])
+        running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
+        running = running[self.average_window - 1:] / self.average_window
 
+        return self.Rewards(rewards=rewards, cumulative=cumulative, running=running)
