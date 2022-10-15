@@ -1,3 +1,6 @@
+"""
+Module: preprocessing
+"""
 import logging
 
 import pandas as pd
@@ -5,6 +8,9 @@ import numpy as np
 
 
 class Preprocessing:
+    """
+    Class: Preprocessing
+    """
 
     def __init__(self):
         """
@@ -17,6 +23,11 @@ class Preprocessing:
         self.logger.setLevel(logging.WARNING)
 
     def __frequency(self, data: pd.DataFrame):
+        """
+
+        :param data:
+        :return:
+        """
 
         frequency = data['movieId'].value_counts().rename('frequency').to_frame()
         frequency.reset_index(drop=False, inplace=True)
@@ -26,6 +37,13 @@ class Preprocessing:
         return frequency
 
     def __reduce(self, data: pd.DataFrame, frequency: pd.DataFrame, limit: int):
+        """
+
+        :param data:
+        :param frequency:
+        :param limit:
+        :return:
+        """
 
         # focus on films that have at least <limit> number of ratings
         frequency = frequency.copy().loc[frequency['frequency'] >= limit, :]
@@ -38,6 +56,11 @@ class Preprocessing:
 
     @staticmethod
     def __restructure(data: pd.DataFrame):
+        """
+
+        :param data:
+        :return:
+        """
 
         restructured = data.sample(frac=1, replace=False, axis=0, random_state=5)
         restructured['t'] = np.arange(stop=restructured.shape[0])
@@ -47,6 +70,11 @@ class Preprocessing:
 
     @staticmethod
     def __extend(data: pd.DataFrame):
+        """
+
+        :param data:
+        :return:
+        """
 
         extended = data.copy()
         extended['liked'] = np.where(extended['rating'] < 4.5, 0, 1)
@@ -54,6 +82,12 @@ class Preprocessing:
         return extended
 
     def exc(self, data: pd.DataFrame, limit: int):
+        """
+
+        :param data:
+        :param limit:
+        :return:
+        """
 
         # the number of film rating records
         self.logger.info(f'The initial number of observations: {data.shape}')
