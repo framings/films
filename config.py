@@ -15,7 +15,7 @@ class Config:
         self.slate_size = 5
 
         # instead of updating an online algorithm after each event, update it after every <batch_event> events
-        self.batch_size = 10
+        self.batch_size = 50
 
         # running average window
         self.average_window = 5
