@@ -1,3 +1,6 @@
+"""
+Module: epsilon greedy
+"""
 import collections
 import logging
 
@@ -8,6 +11,9 @@ import config
 
 
 class EpsilonGreedy:
+    """
+    Class: EpsilonGreedy
+    """
 
     def __init__(self, data: pd.DataFrame, epsilon: float):
         """
@@ -34,6 +40,12 @@ class EpsilonGreedy:
         self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
 
     def score(self, history: pd.DataFrame, boundary: int):
+        """
+
+        :param history:
+        :param boundary:
+        :return:
+        """
 
         # the epsilon greedy policy applies to the historic dataset prior & equal to the current step
         excerpt = history.loc[history['t'] <= boundary, ]
