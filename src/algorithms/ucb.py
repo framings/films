@@ -22,7 +22,6 @@ class UCB:
         self.batch_size = configurations.batch_size
         self.average_window = configurations.average_window
         
-
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
