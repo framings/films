@@ -82,6 +82,10 @@ class EpsilonGreedy:
         return history, action_score
 
     def exc(self):
+        """
+
+        :return:
+        """
 
         # the empty history data frame - consider appending a <scoring_round> field
         history = pd.DataFrame(data=None, columns=self.data.columns)
