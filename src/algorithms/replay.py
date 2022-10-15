@@ -59,7 +59,7 @@ class Replay:
 
         for index in range((self.data.shape[0] // self.batch_size)):
 
-            if index > 499:
+            if index > 99:
                 break
 
             # the lower boundary
