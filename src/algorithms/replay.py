@@ -38,6 +38,12 @@ class Replay:
         self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
 
     def score(self, history: pd.DataFrame, boundary: int):
+        """
+
+        :param history:
+        :param boundary:
+        :return:
+        """
 
         # a temporary recommendation function, it recommends self.slate_size films
         recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
@@ -58,6 +64,10 @@ class Replay:
         return history, action_score
 
     def exc(self):
+        """
+
+        :return:
+        """
 
         # the empty history data frame - consider appending a <scoring_round> field
         history = pd.DataFrame(data=None, columns=self.data.columns)
