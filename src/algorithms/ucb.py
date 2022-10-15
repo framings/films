@@ -21,7 +21,7 @@ class UCB:
         self.slate_size = configurations.slate_size
         self.batch_size = configurations.batch_size
         self.average_window = configurations.average_window
-        self.ucb_scale = configurations.ucb_scale
+        
 
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
