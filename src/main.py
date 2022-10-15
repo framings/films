@@ -23,6 +23,11 @@ def main():
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
 
+    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, epsilon=0.15).exc()
+    logger.info(f'Rewards:\n {scores.rewards}')
+    logger.info(f'Running Average Scores:\n {scores.running}')
+    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
+
 
 if __name__ == '__main__':
 
@@ -40,5 +45,6 @@ if __name__ == '__main__':
     import src.data.films
     import src.data.preprocessing
     import src.algorithms.replay
+    import src.algorithms.epsilongreedy
 
     main()
