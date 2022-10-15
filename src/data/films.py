@@ -44,12 +44,12 @@ class Films:
 
         # the data
         movies = self.__read(pathway='movies.csv')
-        self.logger.info(movies.info())
+        self.logger.info(movies.head())
 
         # one-hot-encoding of the <genres> field - each element of the field becomes a column
         movies = movies.join(movies.genres.str.get_dummies().astype(bool))
         movies.drop(columns='genres', inplace=True)
-        self.logger.info(movies.info())
+        self.logger.info(movies.head())
 
         return movies
 
@@ -57,7 +57,7 @@ class Films:
 
         # the data
         ratings = self.__read(pathway='ratings.csv')
-        self.logger.info(ratings.info())
+        self.logger.info(ratings.head())
 
         return ratings
 
