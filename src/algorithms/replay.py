@@ -42,7 +42,7 @@ class Replay:
         actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
 
         actions['scoring_round'] = boundary
-        history = pd.concat([history, actions], axis=1)
+        history = pd.concat([history, actions], axis=0)
         action_score = actions[['movieId', 'liked']]
 
         return history, action_score
@@ -72,7 +72,7 @@ class Replay:
 
             # hence
             history, action_score = self.score(history=history, boundary=boundary, recommendations=recommendations)
-            self.logger.info(f'Action Score: {action_score}')
+            self.logger.info(f'History\n: {history}')
             if action_score is not None:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
