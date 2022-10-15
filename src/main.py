@@ -9,7 +9,10 @@ def main():
 
     # the data
     data = src.data.films.Films().exc()
-    logger.info(data.info())
+    logger.info(f'DATA:\n {data.info()}')
+    logger.info(f'DATA SHAPE: {data.shape}')
+    logger.info(f"USERS: {data['userId'].unique().shape}")
+    logger.info(data['userId'].value_counts())
 
     # preprocessing
     preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=1500)
