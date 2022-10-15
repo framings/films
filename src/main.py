@@ -10,7 +10,6 @@ def main():
     # the data
     data = src.data.films.Films().exc()
     logger.info(f'DATA:\n {data.info()}')
-    logger.info(f'DATA SHAPE: {data.shape}')
     logger.info(f"USERS: {data['userId'].unique().shape}")
     logger.info(data['userId'].value_counts())
 
@@ -20,8 +19,9 @@ def main():
 
     # algorithms
     scores = src.algorithms.replay.Replay(data=preprocessed).exc()
-    logger.info(f'Running Average Scores: {scores.running}')
-    logger.info(f'Cumulative Sums: {scores.cumulative}')
+    logger.info(f'Rewards:\n {scores.rewards}')
+    logger.info(f'Running Average Scores:\n {scores.running}')
+    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
 
 
 if __name__ == '__main__':
