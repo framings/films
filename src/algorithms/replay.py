@@ -21,6 +21,7 @@ class Replay:
         """
 
         self.data = data
+        self.arms = self.data['movieId'].unique()
 
         # configurations
         configurations = config.Config()
@@ -36,12 +37,21 @@ class Replay:
         # rewards
         self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
 
-    def score(self, history: pd.DataFrame, boundary: int, recommendations: np.ndarray):
+    def score(self, history: pd.DataFrame, boundary: int):
 
+        # a temporary recommendation function, it recommends self.slate_size films
+        recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
+
+        # the latest actions set starts from the latest lower boundary, and has self.batch_size records
         actions = self.data[boundary:(boundary + self.batch_size)]
+
+        # the intersection of actions & recommendations via `movieId`
         actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
 
+        # labelling the actions
         actions['scoring_round'] = boundary
+
+        # in summary
         history = pd.concat([history, actions], axis=0)
         action_score = actions[['movieId', 'liked']]
 
@@ -49,8 +59,7 @@ class Replay:
 
     def exc(self):
 
-        # the empty history data frame
-        # scoring_round?
+        # the empty history data frame - consider appending a <scoring_round> field
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
 
@@ -59,27 +68,24 @@ class Replay:
 
         for index in range((self.data.shape[0] // self.batch_size)):
 
+            # temporary break point
             if index > 99:
                 break
 
-            # the lower boundary
-            boundary = index * self.batch_size
-
-            # a temporary recommendation function
-            recommendations: np.ndarray = np.random.choice(a=self.data['movieId'].unique(),
-                                                           size=self.slate_size,
-                                                           replace=False)
-
             # hence
-            history, action_score = self.score(history=history, boundary=boundary, recommendations=recommendations)
-            self.logger.info(f'History:\n {history}')
+            boundary = index * self.batch_size
+            history, action_score = self.score(history=history, boundary=boundary)
             if action_score is not None:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
 
+        # history
+        self.logger.info(f'History:\n {history}')
+
         # metrics
         cumulative = np.cumsum(rewards, dtype='float64')
         running = cumulative
+        self.logger.info(running[self.average_window:])
         running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
         running = running[self.average_window - 1:] / self.average_window
 
