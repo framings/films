@@ -79,7 +79,7 @@ class Replay:
         for index in range((self.data.shape[0] // self.batch_size)):
 
             # temporary break point
-            if index > 99:
+            if index > 99999:
                 break
 
             # hence
@@ -95,7 +95,6 @@ class Replay:
         # metrics
         cumulative = np.cumsum(rewards, dtype='float64')
         running = cumulative
-        self.logger.info(running[self.average_window:])
         running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
         running = running[self.average_window - 1:] / self.average_window
 
