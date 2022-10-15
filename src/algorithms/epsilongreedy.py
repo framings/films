@@ -78,7 +78,7 @@ class EpsilonGreedy:
 
         for index in range((self.data.shape[0] // self.batch_size)):
 
-            if index > 99:
+            if index > 99999:
                 break
 
             # hence
