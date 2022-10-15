@@ -40,16 +40,18 @@ class EpsilonGreedy:
 
         # the likelihood of an explore option is self.epsilon
         explore = np.random.binomial(n=1, p=self.epsilon, size=1)
+        self.logger.info(f'Explore: {explore}')
 
-        if explore == 1 | excerpt.shape[0] == 0:
+        if explore == 1 or excerpt.shape[0] == 0:
             # a temporary recommendation function
             recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
+            self.logger.info(f'Recommendations: {recommendations}')
         else:
             # exploit
             scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
                                                                              count=('liked', 'count'))
             scores['movieId'] = scores.index
-            scores.sort_values('mean', ascending=False, inplace=True)
+            scores = scores.sort_values('mean', ascending=False)
             recommendations: np.ndarray = scores.loc[scores.index[0:self.slate_size], 'movieId'].values
 
         # the latest actions set starts from the latest lower boundary, and has self.batch_size records
