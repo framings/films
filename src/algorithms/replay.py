@@ -34,7 +34,7 @@ class Replay:
         self.logger = logging.getLogger(__name__)
 
         # rewards
-        self.Rewards = collections.namedtuple(typename='Rewards', field_names=['cumulative', 'running'])
+        self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
 
     def score(self, history: pd.DataFrame, boundary: int, recommendations: np.ndarray):
 
@@ -72,18 +72,15 @@ class Replay:
 
             # hence
             history, action_score = self.score(history=history, boundary=boundary, recommendations=recommendations)
-            self.logger.info(f'History\n: {history}')
+            self.logger.info(f'History:\n {history}')
             if action_score is not None:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
 
         # metrics
-        self.logger.info(f'Rewards: {np.array(rewards)}')
-
         cumulative = np.cumsum(rewards, dtype='float64')
-
         running = cumulative
         running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
         running = running[self.average_window - 1:] / self.average_window
 
-        return self.Rewards(cumulative=cumulative, running=running)
+        return self.Rewards(rewards=rewards, cumulative=cumulative, running=running)
