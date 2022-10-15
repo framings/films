@@ -17,7 +17,7 @@ class Replay:
     def __init__(self, data: pd.DataFrame):
         """
 
-        :param data:
+        :param data: The modelling data set in focus
         """
 
         self.data = data
