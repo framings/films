@@ -26,7 +26,7 @@ def main():
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
 
-    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, epsilon=0.15).exc()
+    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed).exc()
     logger.info(f'Rewards:\n {scores.rewards}')
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
@@ -35,6 +35,15 @@ def main():
     logger.info(f'Rewards:\n {scores.rewards}')
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
+
+    '''
+    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, epsilon=0.15).exc()
+    logger.info(f'Rewards:\n {scores.rewards}')
+    logger.info(f'Running Average Scores:\n {scores.running}')
+    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
+     
+    
+    '''
 
 
 if __name__ == '__main__':
@@ -52,6 +61,7 @@ if __name__ == '__main__':
     # functions
     import src.data.films
     import src.data.preprocessing
+    import src.algorithms.bayesianucb
     import src.algorithms.random
     import src.algorithms.epsilongreedy
     import src.algorithms.ucb
