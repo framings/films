@@ -84,7 +84,7 @@ class UCB:
         for index in range((self.data.shape[0] // self.batch_size)):
 
             # temporary break point
-            if index > 99999:
+            if index > 9999:
                 break
 
             # hence
@@ -93,9 +93,6 @@ class UCB:
             if action_score is not None:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
-
-        # history
-        self.logger.info(f'History:\n {history}')
 
         # metrics
         cumulative = np.cumsum(rewards, dtype='float64')
