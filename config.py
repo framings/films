@@ -2,7 +2,6 @@
 Module: config - the configuration file
 """
 import os
-import scipy.stats
 
 
 class Config:
@@ -16,11 +15,12 @@ class Config:
         self.slate_size = 5
 
         # instead of updating an online algorithm after each event, update it after every <batch_event> events
-        self.batch_size = 1000
+        self.batch_size = 100
 
         # running average window
-        self.average_window = 50
+        self.average_window = 200
 
         # 95% confidence interval parameters w.r.t. two-tailed-test
-        alpha = 1 - 0.95
-        self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
+        # alpha = 1 - 0.95
+        # self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
+        self.critical_value = 1.5
