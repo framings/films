@@ -35,7 +35,10 @@ class BayesianUCB:
 
     def score(self, history: pd.DataFrame, boundary: int):
         """
-
+        A reference for scores['ucb'] formula: https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm
+        
+        :param history:
+        :param boundary:
         :return:
         """
 
