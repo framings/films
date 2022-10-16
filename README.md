@@ -46,7 +46,11 @@ RangeIndex: 25000095 entries, 0 to 25000094
 
 ### References
 
-*  [Multi-Armed Bandit for Recommendations, ``Kawale`` & ``Chow``, 2018](https://www.datacouncil.ai/talks/a-multi-armed-bandit-framework-for-recommendations-at-netflix)
+* [Multi-Armed Bandit for Recommendations, ``Kawale`` & ``Chow``, 2018](https://www.datacouncil.ai/talks/a-multi-armed-bandit-framework-for-recommendations-at-netflix)
+* Confidence Interval
+  * [Notes](https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm)
+  * [Normal Distribution: Critical Values](https://www.itl.nist.gov/div898/handbook/eda/section3/eda3671.htm)
+  * [scipy & critical values](www.statology.org/z-critical-value-python/)
 
 <br>
 <br>
