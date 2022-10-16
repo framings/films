@@ -12,38 +12,37 @@ def main():
 
     # the data
     data = src.data.films.Films().exc()
-    logger.info('\n\nDATA:\n')
-    logger.info(data.info())
     logger.info(f"USERS: {data['userId'].unique().shape}")
-    logger.info(f"Users & Occurrences:\n {data['userId'].value_counts()}")
 
     # preprocessing
     preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=1500)
-    logger.info(preprocessed.head())
+    logger.info('\nPreprocessed:\n')
+    logger.info(preprocessed.info())
 
     # an option
-    src.algorithms.initial .Initial(preprocessed=preprocessed).exc()
+    initial = src.algorithms.initial.Initial(preprocessed=preprocessed).exc()
+    logger.info(f'Initial: {initial.shape}')
 
     # algorithms
     scores = src.algorithms.random.Random(data=preprocessed).exc()
-    logger.info(f'Rewards:\n {scores.rewards}')
-    logger.info(f'Running Average Scores:\n {scores.running}')
-    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
+    logger.info(f'Random Rewards: {len(scores.rewards)}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
+    logger.info(f'Cumulative Sums:\n{scores.cumulative}')
+
+    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, epsilon=0.1).exc()
+    logger.info(f'Epsilon Greedy Rewards: {len(scores.rewards)}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
+    logger.info(f'Cumulative Sums:\n{scores.cumulative}')
 
     scores = src.algorithms.ucb.UCB(data=preprocessed).exc()
-    logger.info(f'Rewards:\n {scores.rewards}')
-    logger.info(f'Running Average Scores:\n {scores.running}')
-    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
+    logger.info(f'UCB Rewards: {len(scores.rewards)}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
+    logger.info(f'Cumulative Sums:\n{scores.cumulative}')
 
     scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed).exc()
-    logger.info(f'Rewards:\n {scores.rewards}')
-    logger.info(f'Running Average Scores:\n {scores.running}')
-    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
-    
-    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, epsilon=0.15).exc()
-    logger.info(f'Rewards:\n {scores.rewards}')
-    logger.info(f'Running Average Scores:\n {scores.running}')
-    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
+    logger.info(f'Bayesian UCB Rewards: {len(scores.rewards)}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
+    logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     
 
 if __name__ == '__main__':
