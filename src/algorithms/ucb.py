@@ -41,6 +41,7 @@ class UCB:
         # the UCB policy applies to the historic dataset prior & equal to the current step
         excerpt = history.loc[history['t'] <= boundary, ]
         scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'), count=('liked', 'count'))
+        scores = scores.loc[scores['count'] > 0, :]
         scores['ucb'] = scores['mean'] + np.sqrt(np.true_divide(2 * np.log10(boundary), scores['count']))
 
         scores['movieId'] = scores.index
