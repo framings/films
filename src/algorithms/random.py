@@ -9,7 +9,7 @@ import numpy as np
 import config
 
 
-class Replay:
+class Random:
     """
     Class: Replay
     """
