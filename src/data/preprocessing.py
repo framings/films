@@ -62,8 +62,13 @@ class Preprocessing:
         :return:
         """
 
+        # shuffling
         restructured = data.sample(frac=1, replace=False, axis=0, random_state=5)
+
+        # adding a time step field
         restructured['t'] = np.arange(stop=restructured.shape[0])
+
+        # setting the index as time steps
         restructured.index = restructured['t']
         
         return restructured
