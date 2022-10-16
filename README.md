@@ -4,7 +4,7 @@
 
 <br>
 
-### Notes
+### Data
 
 * [MovieLens 25M Dataset](https://grouplens.org/datasets/movielens/25m/)
 
@@ -41,6 +41,12 @@ RangeIndex: 25000095 entries, 0 to 25000094
 1 |  imdbId  | 62423 | non-null  | int64
 2 |  tmdbId  | 62316 | non-null  | float64
 
+<br>
+<br>
+
+### References
+
+*  [Multi-Armed Bandit for Recommendations, ``Kawale`` & ``Chow``, 2018](https://www.datacouncil.ai/talks/a-multi-armed-bandit-framework-for-recommendations-at-netflix)
 
 <br>
 <br>
