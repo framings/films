@@ -26,23 +26,23 @@ def main():
     # algorithms
     scores = src.algorithms.random.Random(data=preprocessed).exc()
     logger.info(f'Random Rewards: {len(scores.rewards)}')
-    logger.info(f'Running Average Scores:\n{scores.running}')
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
 
     scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, epsilon=0.1).exc()
     logger.info(f'Epsilon Greedy Rewards: {len(scores.rewards)}')
-    logger.info(f'Running Average Scores:\n{scores.running}')
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
 
     scores = src.algorithms.ucb.UCB(data=preprocessed).exc()
     logger.info(f'UCB Rewards: {len(scores.rewards)}')
-    logger.info(f'Running Average Scores:\n{scores.running}')
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
 
     scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed).exc()
     logger.info(f'Bayesian UCB Rewards: {len(scores.rewards)}')
-    logger.info(f'Running Average Scores:\n{scores.running}')
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
+    logger.info(f'Running Average Scores:\n{scores.running}')
     
 
 if __name__ == '__main__':
