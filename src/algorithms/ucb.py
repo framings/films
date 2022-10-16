@@ -84,7 +84,7 @@ class UCB:
         for index in range((self.data.shape[0] // self.batch_size)):
 
             # temporary break point
-            if index > 9999:
+            if index > 99999:
                 break
 
             # hence
