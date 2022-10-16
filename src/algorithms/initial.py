@@ -65,9 +65,9 @@ class Initial:
     def exc(self):
 
         above = self.__above()
-        self.logger.info(f'Above:\n {above.head()}')
-        self.logger.info(above.info())
-
         below = self.__below()
-        self.logger.info(f'Below:\n {below.head()}')
-        self.logger.info(below.info())
+
+        initial = pd.concat([above, below], axis=0)
+        self.logger.info(initial.sort_values(by='movieId'))
+
+        return initial
