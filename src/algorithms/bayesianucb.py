@@ -49,15 +49,17 @@ class BayesianUCB:
 
         # the UCB policy applies to the historic dataset prior & equal to the current step
         excerpt = history.loc[history['t'] <= boundary, ]
-        scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
-                                                                         count=('liked', 'count'),
-                                                                         std=('liked', 'std'))
-        scores = scores.loc[scores['count'] > 0, :]
-        scores['ucb'] = scores['mean'] + np.true_divide(self.critical_value * scores['std'],  np.sqrt(scores['count']))
+        if excerpt.shape[0] == 0:
+            recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
+        else:
+            scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
+                                                                             count=('liked', 'count'),
+                                                                             std=('liked', 'std'))
+            scores['ucb'] = scores['mean'] + np.true_divide(self.critical_value * scores['std'],  np.sqrt(scores['count']))
 
-        scores['movieId'] = scores.index
-        scores = scores.sort_values('ucb', ascending=False)
-        recommendations: np.ndarray = scores.loc[scores.index[0:self.slate_size], 'movieId'].values
+            scores['movieId'] = scores.index
+            scores = scores.sort_values('ucb', ascending=False)
+            recommendations: np.ndarray = scores.loc[scores.index[0:self.slate_size], 'movieId'].values
 
         '''
         REPLAY ->
