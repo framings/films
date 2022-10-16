@@ -46,6 +46,10 @@ class UCB:
         scores = scores.sort_values('ucb', ascending=False)
         recommendations: np.ndarray = scores.loc[scores.index[0:self.slate_size], 'movieId'].values
 
+        '''
+        REPLAY ->
+        '''
+
         # the latest actions set starts from the latest lower boundary, and has self.batch_size records
         actions = self.data[boundary:(boundary + self.batch_size)]
 
