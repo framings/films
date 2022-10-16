@@ -2,6 +2,7 @@
 import collections
 import logging
 
+import numpy as np
 import pandas as pd
 
 import config
@@ -21,7 +22,7 @@ class UCB:
         self.slate_size = configurations.slate_size
         self.batch_size = configurations.batch_size
         self.average_window = configurations.average_window
-        
+
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
@@ -38,6 +39,27 @@ class UCB:
 
         # the UCB policy applies to the historic dataset prior & equal to the current step
         excerpt = history.loc[history['t'] <= boundary, ]
+        scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'), count=('liked', 'count'))
+        scores['ucb'] = scores['mean'] + np.sqrt(np.true_divide(x1=(2 * np.log10(boundary)), x2=scores['count']))
+
+        scores['movieId'] = scores.index
+        scores = scores.sort_values('ucb', ascending=False)
+        recommendations: np.ndarray = scores.loc[scores.index[0:self.slate_size], 'movieId'].values
+
+        # the latest actions set starts from the latest lower boundary, and has self.batch_size records
+        actions = self.data[boundary:(boundary + self.batch_size)]
+
+        # the intersection of actions & recommendations via `movieId`
+        actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
+
+        # labelling the actions
+        actions['scoring_round'] = boundary
+
+        # in summary
+        history = pd.concat([history, actions], axis=0)
+        action_score = actions[['movieId', 'liked']]
+
+        return history, action_score
 
     def exc(self):
         """
@@ -60,3 +82,18 @@ class UCB:
 
             # hence
             boundary = index * self.batch_size
+            history, action_score = self.score(history=history, boundary=boundary)
+            if action_score is not None:
+                values = action_score['liked'].tolist()
+                rewards.extend(values)
+
+        # history
+        self.logger.info(f'History:\n {history}')
+
+        # metrics
+        cumulative = np.cumsum(rewards, dtype='float64')
+        running = cumulative
+        running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
+        running = running[self.average_window - 1:] / self.average_window
+
+        return self.Rewards(rewards=rewards, cumulative=cumulative, running=running)
