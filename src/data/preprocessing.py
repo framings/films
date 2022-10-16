@@ -22,7 +22,8 @@ class Preprocessing:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.WARNING)
 
-    def __frequency(self, data: pd.DataFrame):
+    @staticmethod
+    def __frequency(data: pd.DataFrame):
         """
 
         :param data:
@@ -32,7 +33,6 @@ class Preprocessing:
         frequency = data['movieId'].value_counts().rename('frequency').to_frame()
         frequency.reset_index(drop=False, inplace=True)
         frequency.rename(columns={'index': 'movieId'}, inplace=True)
-        self.logger.info(frequency)
 
         return frequency
 
