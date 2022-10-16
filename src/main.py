@@ -35,7 +35,6 @@ def main():
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
 
-    '''
     scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed).exc()
     logger.info(f'Rewards:\n {scores.rewards}')
     logger.info(f'Running Average Scores:\n {scores.running}')
@@ -46,8 +45,6 @@ def main():
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
     
-    '''
-
 
 if __name__ == '__main__':
 
