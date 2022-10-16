@@ -110,8 +110,6 @@ class EpsilonGreedy:
 
         # metrics
         cumulative = np.cumsum(rewards, dtype='float64')
-        running = cumulative
-        running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
-        running = running[self.average_window - 1:] / self.average_window
+        running = pd.Series(cumulative).rolling(window=self.average_window).mean().iloc[self.average_window:].values
 
         return self.Rewards(rewards=rewards, cumulative=cumulative, running=running)
