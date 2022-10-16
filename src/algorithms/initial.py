@@ -69,5 +69,5 @@ class Initial:
         self.logger.info(above.info())
 
         below = self.__below()
-        self.logger.info(f'Below:\n {below}')
+        self.logger.info(f'Below:\n {below.head()}')
         self.logger.info(below.info())
