@@ -5,8 +5,6 @@ import logging
 import os
 import sys
 
-import pandas as pd
-
 
 def main():
 
@@ -14,9 +12,10 @@ def main():
 
     # the data
     data = src.data.films.Films().exc()
-    logger.info(f'DATA:\n {data.info()}')
+    logger.info('\n\nDATA:\n')
+    logger.info(data.info())
     logger.info(f"USERS: {data['userId'].unique().shape}")
-    logger.info(data['userId'].value_counts())
+    logger.info(f"Users & Occurrences:\n {data['userId'].value_counts()}")
 
     # preprocessing
     preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=1500)
