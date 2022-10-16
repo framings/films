@@ -52,6 +52,7 @@ class BayesianUCB:
         scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
                                                                          count=('liked', 'count'),
                                                                          std=('liked', 'std'))
+        scores = scores.loc[scores['count'] > 0, :]
         scores['ucb'] = scores['mean'] + np.true_divide(self.critical_value * scores['std'],  np.sqrt(scores['count']))
 
         scores['movieId'] = scores.index
