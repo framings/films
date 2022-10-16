@@ -13,6 +13,7 @@ class UCB:
     def __init__(self, data: pd.DataFrame):
         """
 
+        :param data:
         """
 
         self.data = data
