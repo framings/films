@@ -55,7 +55,7 @@ class BayesianUCB:
             scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
                                                                              count=('liked', 'count'),
                                                                              std=('liked', 'std'))
-            scores['ucb'] = scores['mean'] + np.true_divide(self.critical_value * scores['std'],  np.sqrt(scores['count']))
+            scores['ucb'] = scores['mean'] + np.true_divide(self.critical_value * scores['std'], np.sqrt(scores['count']))
 
             scores['movieId'] = scores.index
             scores = scores.sort_values('ucb', ascending=False)
@@ -108,8 +108,7 @@ class BayesianUCB:
 
         # metrics
         cumulative = np.cumsum(rewards, dtype='float64')
-        running = cumulative
-        running[self.average_window:] = running[self.average_window:] - running[:-self.average_window]
-        running = running[self.average_window - 1:] / self.average_window
+        running = pd.Series(data={'cumulative': cumulative}).rolling(window=self.average_window) \
+                    .mean().iloc[self.average_window:].values
 
         return self.Rewards(rewards=rewards, cumulative=cumulative, running=running)
