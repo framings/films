@@ -48,6 +48,10 @@ class Random:
         # a temporary recommendation function, it recommends self.slate_size films
         recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
 
+        '''
+        REPLAY ->
+        '''
+
         # the latest actions set starts from the latest lower boundary, and has self.batch_size records
         actions = self.data[boundary:(boundary + self.batch_size)]
 
