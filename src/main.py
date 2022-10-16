@@ -5,6 +5,8 @@ import logging
 import os
 import sys
 
+import pandas as pd
+
 
 def main():
 
@@ -20,13 +22,11 @@ def main():
     preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=1500)
     logger.info(preprocessed.head())
 
+    # an option
+    src.algorithms.initial .Initial(preprocessed=preprocessed).exc()
+
     # algorithms
     scores = src.algorithms.random.Random(data=preprocessed).exc()
-    logger.info(f'Rewards:\n {scores.rewards}')
-    logger.info(f'Running Average Scores:\n {scores.running}')
-    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
-
-    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed).exc()
     logger.info(f'Rewards:\n {scores.rewards}')
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
@@ -37,11 +37,15 @@ def main():
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
 
     '''
+    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed).exc()
+    logger.info(f'Rewards:\n {scores.rewards}')
+    logger.info(f'Running Average Scores:\n {scores.running}')
+    logger.info(f'Cumulative Sums:\n {scores.cumulative}')
+    
     scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, epsilon=0.15).exc()
     logger.info(f'Rewards:\n {scores.rewards}')
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
-     
     
     '''
 
@@ -61,6 +65,7 @@ if __name__ == '__main__':
     # functions
     import src.data.films
     import src.data.preprocessing
+    import src.algorithms.initial
     import src.algorithms.bayesianucb
     import src.algorithms.random
     import src.algorithms.epsilongreedy
