@@ -108,6 +108,6 @@ class BayesianUCB:
 
         # metrics
         cumulative = np.cumsum(rewards, dtype='float64')
-        running = pd.Series(cumulative).rolling(window=self.average_window).mean().iloc[self.average_window:].values
+        running = pd.Series(rewards).rolling(window=self.average_window).mean().iloc[self.average_window:].values
 
         return self.Rewards(rewards=rewards, cumulative=cumulative, running=running)
