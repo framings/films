@@ -21,7 +21,7 @@ def main():
     logger.info(preprocessed.head())
 
     # algorithms
-    scores = src.algorithms.replay.Replay(data=preprocessed).exc()
+    scores = src.algorithms.random.Random(data=preprocessed).exc()
     logger.info(f'Rewards:\n {scores.rewards}')
     logger.info(f'Running Average Scores:\n {scores.running}')
     logger.info(f'Cumulative Sums:\n {scores.cumulative}')
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     # functions
     import src.data.films
     import src.data.preprocessing
-    import src.algorithms.replay
+    import src.algorithms.random
     import src.algorithms.epsilongreedy
     import src.algorithms.ucb
 
