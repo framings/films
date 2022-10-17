@@ -83,7 +83,7 @@ class Random:
         for index in range((self.data.shape[0] // self.batch_size)):
 
             # temporary break point
-            if index > 99999:
+            if index > 9999:
                 break
 
             # hence
