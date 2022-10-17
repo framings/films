@@ -2,6 +2,7 @@
 Module: config - the configuration file
 """
 import os
+import collections
 
 
 class Config:
@@ -24,3 +25,11 @@ class Config:
         # alpha = 1 - 0.95
         # self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
         self.critical_value = 1.5
+
+    def hyperparameters(self):
+
+        Arguments = collections.namedtuple(typename='Arguments', field_names=['slate_size', 'batch_size'])
+
+        Arguments(slate_size=5, batch_size=10000)
+
+
