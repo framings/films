@@ -25,7 +25,7 @@ class EpsilonGreedy:
         self.args = config.Config().hyperparameters()
 
         # the range hyperparameter values under exploration
-        self.__epsilon = np.arange(start=0.05, stop=0.40, step=0.01)
+        self.__epsilon = np.arange(start=0.02, stop=0.20, step=0.02)
 
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -40,7 +40,7 @@ class EpsilonGreedy:
         :return:
         """
 
-        scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=self.data, args=self.args, epsilon=epsilon)
+        scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=self.data, args=self.args, epsilon=epsilon).exc()
 
         return scores
 
