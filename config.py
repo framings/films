@@ -27,6 +27,13 @@ class Config:
         self.critical_value = 1.5
 
     @staticmethod
+    def models():
+
+        Arguments = collections.namedtuple(typename='Arguments',
+                                           field_names=['slate_size', 'batch_size', 'average_window', 'critical_value'])
+        return Arguments(slate_size=5, batch_size=100, average_window=200, critical_value=1.5)
+        
+    @staticmethod
     def hyperparameters():
 
         Arguments = collections.namedtuple(typename='Arguments', field_names=['slate_size', 'batch_size'])
