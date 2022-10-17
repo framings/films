@@ -26,10 +26,9 @@ class Config:
         # self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
         self.critical_value = 1.5
 
-    def hyperparameters(self):
+    @staticmethod
+    def hyperparameters():
 
         Arguments = collections.namedtuple(typename='Arguments', field_names=['slate_size', 'batch_size'])
 
-        Arguments(slate_size=5, batch_size=10000)
-
-
+        return Arguments(slate_size=5, batch_size=10000)
