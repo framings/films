@@ -1,4 +1,5 @@
 import collections
+import logging
 
 import numpy as np
 import dask
@@ -24,7 +25,12 @@ class EpsilonGreedy:
         self.args = config.Config().hyperparameters()
 
         # the range hyperparameter values under exploration
-        self.__epsilon = np.arange(start=0.01, stop=0.40, step=0.01)
+        self.__epsilon = np.arange(start=0.05, stop=0.40, step=0.01)
+
+        # logging
+        logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
+                            datefmt='%Y-%m-%d %H:%M:%S')
+        self.logger = logging.getLogger(__name__)
 
     @dask.delayed
     def __evaluate(self, epsilon: float):
@@ -56,6 +62,8 @@ class EpsilonGreedy:
 
         :return:
         """
+
+        self.logger.info(f'\nThe number of hyperparameter values: {len(self.__epsilon)}')
 
         computations = []
         for epsilon in self.__epsilon:
