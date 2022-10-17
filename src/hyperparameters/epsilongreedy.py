@@ -40,7 +40,7 @@ class EpsilonGreedy:
 
     @dask.delayed
     def __aggregate(self, epsilon: float,
-                    scores: collections.namedtuple(typename='',
+                    scores: collections.namedtuple(typename='Rewards',
                                                    field_names=['rewards', 'cumulative', 'running'])) -> dict:
         """
 
