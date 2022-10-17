@@ -49,6 +49,7 @@ class Config:
         :return:
         """
 
-        Arguments = collections.namedtuple(typename='Arguments', field_names=['slate_size', 'batch_size'])
+        Arguments = collections.namedtuple(typename='Arguments',
+                                           field_names=['slate_size', 'batch_size', 'average_window'])
 
-        return Arguments(slate_size=5, batch_size=10000)
+        return Arguments(slate_size=5, batch_size=10000, average_window=200)
