@@ -14,16 +14,23 @@ class EpsilonGreedy:
     def __init__(self, data: pd.DataFrame):
         """
 
+        :param data: The preprocessed modelling data set in focus
         """
 
+        # the data
         self.data = data
+
+        # slate_size, batch_size, average_window
         self.args = config.Config().models()
+
+        # the range hyperparameter values under exploration
         self.__epsilon = np.arange(start=0.01, stop=0.40, step=0.01)
 
     @dask.delayed
     def __evaluate(self, epsilon: float):
         """
 
+        :param epsilon:
         :return:
         """
 
@@ -37,6 +44,8 @@ class EpsilonGreedy:
                                                    field_names=['rewards', 'cumulative', 'running'])) -> dict:
         """
 
+        :param epsilon:
+        :param scores:
         :return:
         """
 
