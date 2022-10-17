@@ -21,7 +21,7 @@ class EpsilonGreedy:
         self.data = data
 
         # slate_size, batch_size, average_window
-        self.args = config.Config().models()
+        self.args = config.Config().hyperparameters()
 
         # the range hyperparameter values under exploration
         self.__epsilon = np.arange(start=0.01, stop=0.40, step=0.01)
