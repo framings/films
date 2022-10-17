@@ -7,18 +7,21 @@ import logging
 import numpy as np
 import pandas as pd
 
-import config
-
 
 class EpsilonGreedy:
     """
     Class: EpsilonGreedy
     """
 
-    def __init__(self, data: pd.DataFrame, epsilon: float):
+    def __init__(self,
+                 data: pd.DataFrame,
+                 args: collections.namedtuple(typename='Arguments',
+                                              field_names=['slate_size', 'batch_size', 'average_window']),
+                 epsilon: float):
         """
 
         :param data: The modelling data set in focus
+        :param args: Modelling parameters
         :param epsilon: The fraction of time steps to explore
         """
 
@@ -26,10 +29,9 @@ class EpsilonGreedy:
         self.arms = self.data['movieId'].unique()
         self.epsilon = epsilon
 
-        configurations = config.Config()
-        self.slate_size = configurations.slate_size
-        self.batch_size = configurations.batch_size
-        self.average_window = configurations.average_window
+        self.slate_size = args.slate_size
+        self.batch_size = args.batch_size
+        self.average_window = args.average_window
 
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -98,7 +100,7 @@ class EpsilonGreedy:
         for index in range((self.data.shape[0] // self.batch_size)):
 
             # temporary break point
-            if index > 99999:
+            if index > 9999:
                 break
 
             # hence
