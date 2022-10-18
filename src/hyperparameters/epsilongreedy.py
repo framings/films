@@ -1,18 +1,28 @@
+"""
+Module: epsilongreedy
+"""
 import collections
 import logging
 
+import dask
 import numpy as np
 import pandas as pd
-import dask
 
 import config
 import src.algorithms.epsilongreedy
 
 
 class EpsilonGreedy:
+    """
+    Class: EpsilonGreedy
+
+    This class' focus is the optimal <epsilon> hyperparameter.  If large memory machines are accessible, dask
+    based computations are worth it.
+    """
 
     def __init__(self, data: pd.DataFrame):
         """
+        dask.distributed.Client(n_workers=1, threads_per_worker=2)
 
         :param data: The preprocessed modelling data set in focus
         """
@@ -60,6 +70,8 @@ class EpsilonGreedy:
     def exc(self):
         """
 
+
+
         :return:
         """
 
@@ -72,6 +84,6 @@ class EpsilonGreedy:
             computations.append(aggregate)
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
-        calculations = dask.compute(computations, scheduler='processes', num_workers=1)[0]
+        calculations = dask.compute(computations, scheduler='threads', num_workers=1)
 
         return calculations
