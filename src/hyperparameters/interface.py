@@ -25,11 +25,10 @@ def main():
     hyper = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
     logger.info(hyper)
     logger.info(hyper[0][1])
-    logger.info(hyper[1][1])
 
     example = [hyper[i][1] for i in np.arange(len(hyper))]
     logger.info(example)
-    logger.info(example[0])
+    logger.info(pd.concat(example))
 
     sample = [hyper[i][0] for i in np.arange(len(hyper))]
     logger.info(sample)
