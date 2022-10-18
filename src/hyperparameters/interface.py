@@ -29,6 +29,7 @@ def main():
 
     example = [hyper[i][1] for i in np.arange(len(hyper))]
     logger.info(example)
+    logger.info(pd.concat(example))
 
 
 if __name__ == '__main__':
