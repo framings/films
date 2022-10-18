@@ -29,7 +29,7 @@ def main():
 
     example = [hyper[i][1] for i in np.arange(len(hyper))]
     logger.info(example)
-    logger.info(pd.concat(example))
+    logger.info(example[0])
 
     sample = [hyper[i][0] for i in np.arange(len(hyper))]
     logger.info(sample)
