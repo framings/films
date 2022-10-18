@@ -99,7 +99,7 @@ class EpsilonGreedy:
             scores = self.__evaluate(epsilon=epsilon)
             aggregate = self.__aggregate(epsilon=epsilon, scores=scores)
             estimates = self.__estimates(epsilon=epsilon, scores=scores)
-            computations.append([[aggregate], [estimates]])
+            computations.append([aggregate, estimates])
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
         calculations = dask.compute(computations, scheduler='threads', num_workers=1)[0]
