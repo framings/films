@@ -31,6 +31,9 @@ def main():
     logger.info(example)
     logger.info(pd.concat(example))
 
+    sample = [hyper[i][0] for i in np.arange(len(hyper))]
+    logger.info(sample)
+
 
 if __name__ == '__main__':
     # directories/paths
