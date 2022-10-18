@@ -2,12 +2,11 @@ import collections
 import logging
 
 import numpy as np
-import dask
 import pandas as pd
-
-import src.algorithms.epsilongreedy
+import dask
 
 import config
+import src.algorithms.epsilongreedy
 
 
 class EpsilonGreedy:
@@ -25,7 +24,8 @@ class EpsilonGreedy:
         self.args = config.Config().hyperparameters()
 
         # the range hyperparameter values under exploration
-        self.__epsilon = np.arange(start=0.02, stop=0.20, step=0.02)
+        self.__epsilon = np.arange(start=0.08, stop=0.16, step=0.02)
+        self.__epsilongreedy = src.algorithms.epsilongreedy.EpsilonGreedy(data=self.data, args=self.args)
 
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -40,7 +40,7 @@ class EpsilonGreedy:
         :return:
         """
 
-        scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=self.data, args=self.args, epsilon=epsilon).exc()
+        scores = self.__epsilongreedy.exc(epsilon=epsilon)
 
         return scores
 
@@ -55,7 +55,7 @@ class EpsilonGreedy:
         :return:
         """
 
-        return {'epsilon': epsilon, 'median': np.median(scores.rewards)}
+        return {'epsilon': epsilon, 'average': np.mean(scores.rewards), 'N': len(scores.rewards)}
 
     def exc(self):
         """
@@ -72,6 +72,6 @@ class EpsilonGreedy:
             computations.append(aggregate)
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
-        calculations = dask.compute(computations, scheduler='processes')[0]
+        calculations = dask.compute(computations, scheduler='processes', num_workers=1)[0]
 
         return calculations
