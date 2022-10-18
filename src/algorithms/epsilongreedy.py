@@ -16,18 +16,15 @@ class EpsilonGreedy:
     def __init__(self,
                  data: pd.DataFrame,
                  args: collections.namedtuple(typename='Arguments',
-                                              field_names=['slate_size', 'batch_size', 'average_window']),
-                 epsilon: float):
+                                              field_names=['slate_size', 'batch_size', 'average_window'])):
         """
 
         :param data: The modelling data set in focus
         :param args: Modelling parameters
-        :param epsilon: The fraction of time steps to explore
         """
 
         self.data = data
         self.arms = self.data['movieId'].unique()
-        self.epsilon = epsilon
 
         self.slate_size = args.slate_size
         self.batch_size = args.batch_size
@@ -41,19 +38,20 @@ class EpsilonGreedy:
         # rewards
         self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
 
-    def score(self, history: pd.DataFrame, boundary: int):
+    def score(self, history: pd.DataFrame, boundary: int, epsilon: float):
         """
 
         :param history:
         :param boundary:
+        :param epsilon:
         :return:
         """
 
         # the epsilon greedy policy applies to the historic dataset prior & equal to the current step
         excerpt = history.loc[history['t'] <= boundary, ]
 
-        # the likelihood of an explore option is self.epsilon
-        explore = np.random.binomial(n=1, p=self.epsilon, size=1)
+        # the likelihood of an explore option is epsilon
+        explore = np.random.binomial(n=1, p=epsilon, size=1)
         if explore == 1 or excerpt.shape[0] == 0:
             # a temporary recommendation function
             recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
@@ -84,9 +82,10 @@ class EpsilonGreedy:
 
         return history, action_score
 
-    def exc(self):
+    def exc(self, epsilon: float):
         """
 
+        :param epsilon: The fraction of time steps to explore
         :return:
         """
 
@@ -105,7 +104,7 @@ class EpsilonGreedy:
 
             # hence
             boundary = index * self.batch_size
-            history, action_score = self.score(history=history, boundary=boundary)
+            history, action_score = self.score(history=history, boundary=boundary, epsilon=epsilon)
             if action_score is not None:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
