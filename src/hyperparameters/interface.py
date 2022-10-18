@@ -24,7 +24,8 @@ def main():
     # epsilon greedy
     hyper = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
     logger.info(hyper)
-    logger.info(np.array(hyper))
+    logger.info(hyper[0][1])
+    logger.info(hyper[1][1])
 
 
 if __name__ == '__main__':
