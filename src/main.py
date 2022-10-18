@@ -29,7 +29,7 @@ def main():
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     logger.info(f'Running Average Scores:\n{scores.running}')
 
-    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, args=args, epsilon=0.1).exc()
+    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, args=args).exc(epsilon=0.1)
     logger.info(f'Epsilon Greedy\nRewards: {len(scores.rewards)}')
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     logger.info(f'Running Average Scores:\n{scores.running}')
