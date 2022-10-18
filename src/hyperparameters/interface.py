@@ -4,7 +4,7 @@ import sys
 
 import logging
 
-import numpy
+import numpy as np
 import pandas as pd
 
 
@@ -24,7 +24,7 @@ def main():
     # epsilon greedy
     hyper = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
     logger.info(hyper)
-    logger.info(len(hyper))
+    logger.info(np.array(hyper))
 
 
 if __name__ == '__main__':
