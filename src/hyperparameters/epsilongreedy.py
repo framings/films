@@ -34,7 +34,7 @@ class EpsilonGreedy:
         self.args = config.Config().hyperparameters()
 
         # the range hyperparameter values under exploration
-        self.__epsilon = np.arange(start=0.08, stop=0.16, step=0.02)
+        self.__epsilon = np.arange(start=0.08, stop=0.12, step=0.02)
         self.__epsilongreedy = src.algorithms.epsilongreedy.EpsilonGreedy(data=self.data, args=self.args)
 
         # logging
@@ -65,7 +65,10 @@ class EpsilonGreedy:
         :return:
         """
 
-        return {'epsilon': epsilon, 'average': np.mean(scores.rewards), 'N': len(scores.rewards)}
+        series = pd.DataFrame(data={'step': np.arange(start=0,stop=len(scores.running)), 'MA': scores.running})
+        metrics = {'epsilon': epsilon, 'average': np.mean(scores.rewards), 'N': len(scores.rewards)}
+
+        return {'metrics': metrics, 'series': series}
 
     def exc(self):
         """
@@ -84,6 +87,6 @@ class EpsilonGreedy:
             computations.append(aggregate)
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
-        calculations = dask.compute(computations, scheduler='threads', num_workers=1)
+        calculations = dask.compute(computations, scheduler='threads', num_workers=1)[0]
 
         return calculations
