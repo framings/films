@@ -34,7 +34,7 @@ class EpsilonGreedy:
         self.args = config.Config().hyperparameters()
 
         # the range hyperparameter values under exploration
-        self.__epsilon = np.arange(start=0.08, stop=0.14, step=0.02)
+        self.__epsilon = np.arange(start=0.08, stop=0.13, step=0.02)
         self.__epsilongreedy = src.algorithms.epsilongreedy.EpsilonGreedy(data=self.data, args=self.args)
 
         # logging
