@@ -35,11 +35,7 @@ class EpsilonGreedy:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
-        # rewards
-        self.Rewards = collections.namedtuple(typename='Rewards',
-                                              field_names=['rewards', 'cumulative', 'running', 'history'])
-
-    def score(self, history: pd.DataFrame, boundary: int, epsilon: float):
+    def score(self, history: pd.DataFrame, boundary: int, epsilon: float) -> pd.DataFrame:
         """
 
         :param history:
@@ -79,11 +75,10 @@ class EpsilonGreedy:
 
         # in summary
         history = pd.concat([history, actions], axis=0)
-        action_score = actions[['movieId', 'liked']]
 
-        return history, action_score
+        return history
 
-    def exc(self, epsilon: float):
+    def exc(self, epsilon: float) -> pd.DataFrame:
         """
 
         :param epsilon: The fraction of time steps to explore
@@ -94,9 +89,6 @@ class EpsilonGreedy:
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
 
-        # rewards
-        rewards = []
-
         for index in range((self.data.shape[0] // self.batch_size)):
 
             # Temporary break point
@@ -105,17 +97,7 @@ class EpsilonGreedy:
 
             # Hence
             boundary = index * self.batch_size
-            history, action_score = self.score(history=history, boundary=boundary, epsilon=epsilon)
-
-            # Note that if <action_score> is empty then <history>'s input & output lengths will
-            # be the same
-            if action_score is not None:
-                values = action_score['liked'].tolist()
-                rewards.extend(values)
-
-        # Metrics: the rewards series should be calculable via <history>, check
-        cumulative = np.cumsum(rewards, dtype='float64')
-        running = pd.Series(rewards).rolling(window=self.average_window).mean().iloc[self.average_window:].values
+            history = self.score(history=history, boundary=boundary, epsilon=epsilon)
 
         # In progress
         # ... the raw <rewards> values are the values of field <liked>
@@ -124,4 +106,4 @@ class EpsilonGreedy:
         history['cumulative'] = history['liked'].cumsum(axis=0)
         history['MA'] = history['liked'].rolling(window=self.average_window).mean()
 
-        return self.Rewards(rewards=rewards, cumulative=cumulative, running=running, history=history)
+        return history
