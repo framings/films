@@ -118,7 +118,10 @@ class EpsilonGreedy:
         running = pd.Series(rewards).rolling(window=self.average_window).mean().iloc[self.average_window:].values
 
         # In progress
+        # ... the raw <rewards> values are the values of field <liked>
+        # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
         history['epsilon'] = epsilon
+        history['cumulative'] = history['liked'].cumsum(axis=0)
         history['MA'] = history['liked'].rolling(window=self.average_window).mean()
 
         return self.Rewards(rewards=rewards, cumulative=cumulative, running=running, history=history)
