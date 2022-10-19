@@ -1,7 +1,6 @@
 """
 Module: epsilongreedy
 """
-import collections
 import logging
 
 import dask
@@ -54,23 +53,6 @@ class EpsilonGreedy:
 
         return scores
 
-    @dask.delayed
-    def __aggregates(self, epsilon: float,
-                    scores: collections.namedtuple(typename='Rewards',
-                                                   field_names=['rewards', 'cumulative', 'running'])):
-        """
-
-        :param epsilon:
-        :param scores:
-        :return:
-        """
-
-        metrics = {'epsilon': epsilon, 'average': np.mean(scores.rewards), 'N': len(scores.rewards)}
-
-        return metrics
-
-
-
     def exc(self):
         """
 
@@ -82,8 +64,7 @@ class EpsilonGreedy:
         computations = []
         for epsilon in self.__epsilon:
             scores = self.__evaluate(epsilon=epsilon)
-            aggregates = self.__aggregates(epsilon=epsilon, scores=scores)
-            computations.append([aggregates, scores])
+            computations.append(scores)
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
         calculations = dask.compute(computations, scheduler='threads', num_workers=2)[0]
