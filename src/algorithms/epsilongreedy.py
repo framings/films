@@ -54,7 +54,7 @@ class EpsilonGreedy:
         excerpt = history.loc[history['t'] <= boundary, ]
 
         # the likelihood of an explore option is epsilon
-        explore = np.random.binomial(n=1, p=epsilon, size=1)
+        explore = self.rng.binomial(n=1, p=epsilon, size=1)
         if explore == 1 or excerpt.shape[0] == 0:
             # a temporary recommendation function
             recommendations: np.ndarray = self.rng.choice(a=self.arms, size=self.slate_size, replace=False)
