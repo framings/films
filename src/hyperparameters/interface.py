@@ -23,15 +23,15 @@ def main():
 
     # epsilon greedy
     hyper = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
-    logger.info(hyper)
-    logger.info(hyper[0][1])
 
-    example = [hyper[i][1] for i in np.arange(len(hyper))]
-    logger.info(example)
-    logger.info(pd.concat(example))
+    metrics = [hyper[i][0] for i in np.arange(len(hyper))]
+    logger.info(metrics)
 
-    sample = [hyper[i][0] for i in np.arange(len(hyper))]
-    logger.info(sample)
+    estimates = [hyper[i][1] for i in np.arange(len(hyper))]
+    logger.info(pd.concat(estimates))
+
+    histories = [hyper[i][2] for i in np.arange(len(hyper))]
+    logger.info(pd.concat(histories))
 
 
 if __name__ == '__main__':
