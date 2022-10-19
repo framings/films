@@ -20,7 +20,7 @@ def main():
     logger.info(preprocessed.info())
 
     # an option
-    initial = src.algorithms.initial.Initial(preprocessed=preprocessed).exc()
+    initial = src.functions.initial.Initial(preprocessed=preprocessed).exc()
     logger.info(f'Initial: {initial.shape}')
 
     # algorithms
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     # functions
     import src.data.films
     import src.data.preprocessing
-    import src.algorithms.initial
+    import src.functions.initial
     import src.algorithms.bayesianucb
     import src.algorithms.random
     import src.algorithms.epsilongreedy
