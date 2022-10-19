@@ -55,7 +55,7 @@ class EpsilonGreedy:
         return scores
 
     @dask.delayed
-    def __aggregate(self, epsilon: float,
+    def __aggregates(self, epsilon: float,
                     scores: collections.namedtuple(typename='Rewards',
                                                    field_names=['rewards', 'cumulative', 'running'])):
         """
@@ -82,7 +82,7 @@ class EpsilonGreedy:
         computations = []
         for epsilon in self.__epsilon:
             scores = self.__evaluate(epsilon=epsilon)
-            aggregates = self.__aggregate(epsilon=epsilon, scores=scores)
+            aggregates = self.__aggregates(epsilon=epsilon, scores=scores)
             computations.append([aggregates, scores])
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
