@@ -102,6 +102,6 @@ class EpsilonGreedy:
             computations.append([aggregate, estimates, scores.history])
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
-        calculations = dask.compute(computations, scheduler='threads', num_workers=1)[0]
+        calculations = dask.compute(computations, scheduler='threads', num_workers=2)[0]
 
         return calculations
