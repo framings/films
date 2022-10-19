@@ -6,6 +6,8 @@ import logging
 import pandas as pd
 import numpy as np
 
+import config
+
 
 class Preprocessing:
     """
@@ -16,6 +18,8 @@ class Preprocessing:
         """
 
         """
+
+        self.seed = config.Config().seed
 
         logging.basicConfig(level=logging.ERROR, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
@@ -54,8 +58,7 @@ class Preprocessing:
 
         return reduced
 
-    @staticmethod
-    def __restructure(data: pd.DataFrame):
+    def __restructure(self, data: pd.DataFrame):
         """
 
         :param data:
@@ -63,7 +66,7 @@ class Preprocessing:
         """
 
         # shuffling
-        restructured = data.sample(frac=1, replace=False, axis=0, random_state=5)
+        restructured = data.sample(frac=1, replace=False, axis=0, random_state=self.seed)
 
         # adding a time step field
         restructured['t'] = np.arange(stop=restructured.shape[0])
