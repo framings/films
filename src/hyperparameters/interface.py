@@ -26,6 +26,10 @@ def main():
     history = pd.concat(histories)
     logger.info(history)
 
+    metrics = history[['epsilon', 'liked']].groupby(by='epsilon').agg(average=('liked', 'mean'), N=('liked', 'count'))
+    metrics.reset_index(drop=False, inplace=True)
+    logger.info(metrics)
+
 
 if __name__ == '__main__':
     # directories/paths
