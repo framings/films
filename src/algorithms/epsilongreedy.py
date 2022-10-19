@@ -26,11 +26,10 @@ class EpsilonGreedy:
         """
 
         self.data = data
-        self.arms = self.data['movieId'].unique()
+        self.args = args
 
-        self.slate_size = args.slate_size
-        self.batch_size = args.batch_size
-        self.average_window = args.average_window
+        # the arms
+        self.arms = self.data['movieId'].unique()
 
         # the random number generator instance
         self.rng = np.random.default_rng(seed=config.Config().seed)
@@ -42,7 +41,8 @@ class EpsilonGreedy:
 
     def score(self, history: pd.DataFrame, boundary: int, epsilon: float) -> pd.DataFrame:
         """
-        Reference: https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.choice.html#numpy.random.Generator.choice
+        Reference: https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.choice.html#\
+            numpy.random.Generator.choice
 
         :param history:
         :param boundary:
@@ -57,21 +57,21 @@ class EpsilonGreedy:
         explore = self.rng.binomial(n=1, p=epsilon, size=1)
         if explore == 1 or excerpt.shape[0] == 0:
             # a temporary recommendation function
-            recommendations: np.ndarray = self.rng.choice(a=self.arms, size=self.slate_size, replace=False)
+            recommendations: np.ndarray = self.rng.choice(a=self.arms, size=self.args.slate_size, replace=False)
         else:
             # exploit
             scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
                                                                              count=('liked', 'count'))
             scores['movieId'] = scores.index
             scores = scores.sort_values('mean', ascending=False)
-            recommendations: np.ndarray = scores.loc[scores.index[0:self.slate_size], 'movieId'].values
+            recommendations: np.ndarray = scores.loc[scores.index[0:self.args.slate_size], 'movieId'].values
 
         '''
         REPLAY ->
         '''
 
-        # the latest actions set starts from the latest lower boundary, and has self.batch_size records
-        actions = self.data[boundary:(boundary + self.batch_size)]
+        # the latest actions set starts from the latest lower boundary, and has self.args.batch_size records
+        actions = self.data[boundary:(boundary + self.args.batch_size)]
 
         # the intersection of actions & recommendations via `movieId`
         actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
@@ -95,14 +95,14 @@ class EpsilonGreedy:
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
 
-        for index in range((self.data.shape[0] // self.batch_size)):
+        for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # Temporary break point
             if index > 1000000:
                 break
 
             # Hence
-            boundary = index * self.batch_size
+            boundary = index * self.args.batch_size
             history = self.score(history=history, boundary=boundary, epsilon=epsilon)
 
         # In progress
@@ -110,6 +110,6 @@ class EpsilonGreedy:
         # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
         history['epsilon'] = epsilon
         history['cumulative'] = history['liked'].cumsum(axis=0)
-        history['MA'] = history['liked'].rolling(window=self.average_window).mean()
+        history['MA'] = history['liked'].rolling(window=self.args.average_window).mean()
 
         return history
