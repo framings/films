@@ -22,20 +22,10 @@ def main():
     logger.info(preprocessed.info())
 
     # epsilon greedy
-    hyper = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
-
-    metrics = [hyper[i][0] for i in np.arange(len(hyper))]
-    logger.info(metrics)
-
-    estimates = [hyper[i][1] for i in np.arange(len(hyper))]
-    logger.info(pd.concat(estimates))
-
-    histories = [hyper[i][2] for i in np.arange(len(hyper))]
-    logger.info(pd.concat(histories))
-
-    accumulations = [hyper[i][3] for i in np.arange(len(hyper))]
-    logger.info(accumulations)
-
+    histories = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
+    history = pd.concat(histories)
+    logger.info(history)
+    
 
 if __name__ == '__main__':
     # directories/paths
