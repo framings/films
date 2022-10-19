@@ -29,7 +29,7 @@ def main():
     # by default Skip NaN = True
     metrics = history[['epsilon', 'liked', 'MA']].groupby(by='epsilon').agg(average=('liked', 'mean'),
                                                                             N=('liked', 'count'),
-                                                                            max_moving_average=('MA', 'max'))
+                                                                            max_moving_average=('MA', 'last'))
     metrics.reset_index(drop=False, inplace=True)
     logger.info(metrics)
 
