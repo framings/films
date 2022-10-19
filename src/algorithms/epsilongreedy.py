@@ -107,7 +107,7 @@ class EpsilonGreedy:
             boundary = index * self.batch_size
             history, action_score = self.score(history=history, boundary=boundary, epsilon=epsilon)
 
-            # Note that if action_score is empty then history's input & output lengths will
+            # Note that if <action_score> is empty then <history>'s input & output lengths will
             # be the same
             if action_score is not None:
                 values = action_score['liked'].tolist()
@@ -116,5 +116,9 @@ class EpsilonGreedy:
         # Metrics: the rewards series should be calculable via <history>, check
         cumulative = np.cumsum(rewards, dtype='float64')
         running = pd.Series(rewards).rolling(window=self.average_window).mean().iloc[self.average_window:].values
+
+        # In progress
+        history['epsilon'] = epsilon
+        history['MA'] = history['liked'].rolling(window=self.average_window).mean()
 
         return self.Rewards(rewards=rewards, cumulative=cumulative, running=running, history=history)
