@@ -72,7 +72,7 @@ class EpsilonGreedy:
         REPLAY ->
         '''
 
-        history = self.replay.exc(history=history, boundary=boundary, recommendations=recommendations)
+        history = self.replay.exc(history=history.copy(), boundary=boundary, recommendations=recommendations)
 
         return history
 
