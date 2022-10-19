@@ -69,22 +69,7 @@ class EpsilonGreedy:
 
         return metrics
 
-    @dask.delayed
-    def __estimates(self, epsilon: float,
-                    scores: collections.namedtuple(typename='Rewards',
-                                                   field_names=['rewards', 'cumulative', 'running'])):
-        """
 
-        :param epsilon:
-        :param scores:
-        :return:
-        """
-
-        series = pd.DataFrame(data={'step': np.arange(start=0, stop=len(scores.running)),
-                                    'epsilon': np.repeat(epsilon, len(scores.running)),
-                                    'MA': scores.running})
-
-        return series
 
     def exc(self):
         """
@@ -97,9 +82,8 @@ class EpsilonGreedy:
         computations = []
         for epsilon in self.__epsilon:
             scores = self.__evaluate(epsilon=epsilon)
-            aggregate = self.__aggregate(epsilon=epsilon, scores=scores)
-            estimates = self.__estimates(epsilon=epsilon, scores=scores)
-            computations.append([aggregate, estimates, scores.history, scores.cumulative])
+            aggregates = self.__aggregate(epsilon=epsilon, scores=scores)
+            computations.append([aggregates, scores])
 
         dask.visualize(computations, filename='epsilonGreedy', format='pdf')
         calculations = dask.compute(computations, scheduler='threads', num_workers=2)[0]
