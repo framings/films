@@ -33,6 +33,9 @@ def main():
     histories = [hyper[i][2] for i in np.arange(len(hyper))]
     logger.info(pd.concat(histories))
 
+    accumulations = [hyper[i][3] for i in np.arange(len(hyper))]
+    logger.info(accumulations)
+
 
 if __name__ == '__main__':
     # directories/paths
