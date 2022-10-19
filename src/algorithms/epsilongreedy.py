@@ -7,6 +7,8 @@ import logging
 import numpy as np
 import pandas as pd
 
+import config
+
 
 class EpsilonGreedy:
     """
@@ -30,6 +32,9 @@ class EpsilonGreedy:
         self.batch_size = args.batch_size
         self.average_window = args.average_window
 
+        # the random number generator instance
+        self.rng = np.random.default_rng(seed=config.Config().seed)
+
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
                             datefmt='%Y-%m-%d %H:%M:%S')
@@ -51,7 +56,7 @@ class EpsilonGreedy:
         explore = np.random.binomial(n=1, p=epsilon, size=1)
         if explore == 1 or excerpt.shape[0] == 0:
             # a temporary recommendation function
-            recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.slate_size, replace=False)
+            recommendations: np.ndarray = self.rng.choice(a=self.arms, size=self.slate_size, replace=False)
         else:
             # exploit
             scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
