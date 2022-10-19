@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 import config
+import src.functions.replay
 
 
 class EpsilonGreedy:
@@ -27,6 +28,7 @@ class EpsilonGreedy:
 
         self.data = data
         self.args = args
+        self.replay = src.functions.replay.Replay(data=self.data, args=self.args)
 
         # the arms
         self.arms = self.data['movieId'].unique()
@@ -70,17 +72,7 @@ class EpsilonGreedy:
         REPLAY ->
         '''
 
-        # the latest actions set starts from the latest lower boundary, and has self.args.batch_size records
-        actions = self.data[boundary:(boundary + self.args.batch_size)]
-
-        # the intersection of actions & recommendations via `movieId`
-        actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
-
-        # labelling the actions
-        actions['scoring_round'] = boundary
-
-        # in summary
-        history = pd.concat([history, actions], axis=0)
+        history = self.replay.exc(history=history, boundary=boundary, recommendations=recommendations)
 
         return history
 
