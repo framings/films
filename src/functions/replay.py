@@ -34,7 +34,7 @@ class Replay:
         """
 
         # the latest actions set starts from the latest lower boundary, and has self.batch_size records
-        actions = self.data[boundary:(boundary + self.args.slate_size)]
+        actions = self.data[boundary:(boundary + self.args.batch_size)]
 
         # the intersection of actions & recommendations via `movieId`
         actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
