@@ -25,7 +25,7 @@ def main():
     histories = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
     history = pd.concat(histories)
     logger.info(history)
-    
+
 
 if __name__ == '__main__':
     # directories/paths
