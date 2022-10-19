@@ -24,7 +24,12 @@ def main():
     history = pd.concat(histories)
     logger.info(history)
 
-    metrics = history[['epsilon', 'liked']].groupby(by='epsilon').agg(average=('liked', 'mean'), N=('liked', 'count'))
+    # metrics
+    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.max.html
+    # by default Skip NaN = True
+    metrics = history[['epsilon', 'liked', 'MA']].groupby(by='epsilon').agg(average=('liked', 'mean'),
+                                                                            N=('liked', 'count'),
+                                                                            max_moving_average=('MA', 'max'))
     metrics.reset_index(drop=False, inplace=True)
     logger.info(metrics)
 
