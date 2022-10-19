@@ -42,6 +42,7 @@ class EpsilonGreedy:
 
     def score(self, history: pd.DataFrame, boundary: int, epsilon: float) -> pd.DataFrame:
         """
+        Reference: https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.choice.html#numpy.random.Generator.choice
 
         :param history:
         :param boundary:
