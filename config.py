@@ -9,6 +9,8 @@ class Config:
 
     def __init__(self):
 
+        self.seed = 5
+
         # the data directory
         self.data_directory = os.path.join(os.getcwd(), 'data')
 
