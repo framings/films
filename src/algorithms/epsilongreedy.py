@@ -97,7 +97,7 @@ class EpsilonGreedy:
             boundary = index * self.args.batch_size
             history = self.score(history=history, boundary=boundary, epsilon=epsilon)
 
-        # In progress
+        # In summary
         # ... the raw <rewards> values are the values of field <liked>
         # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
         history['epsilon'] = epsilon
