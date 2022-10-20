@@ -50,7 +50,7 @@ RangeIndex: 25000095 entries, 0 to 25000094
 * Confidence Interval
   * [Notes](https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm)
   * [Normal Distribution: Critical Values](https://www.itl.nist.gov/div898/handbook/eda/section3/eda3671.htm)
-  * [scipy & critical values](www.statology.org/z-critical-value-python/)
+  * [scipy & critical values](https://www.statology.org/z-critical-value-python/)
 
 <br>
 <br>
