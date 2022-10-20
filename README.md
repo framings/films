@@ -44,6 +44,14 @@ RangeIndex: 25000095 entries, 0 to 25000094
 <br>
 <br>
 
+### Notes
+
+Note, remember, that [pandas.DataFrame.max](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.max.html) skips 
+NaN values by default.
+
+<br>
+<br>
+
 ### References
 
 * [Multi-Armed Bandit for Recommendations, ``Kawale`` & ``Chow``, 2018](https://www.datacouncil.ai/talks/a-multi-armed-bandit-framework-for-recommendations-at-netflix)
