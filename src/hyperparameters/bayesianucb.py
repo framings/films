@@ -46,4 +46,8 @@ class BayesianUCB:
         :return:
         """
 
-        self.logger.info(self.__critical_value)
+        self.logger.info(f'\nThe number of hyperparameter values: {len(self.__critical_value)}')
+
+        for critical_value in self.__critical_value:
+
+            self.logger.info(critical_value)
