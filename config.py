@@ -25,8 +25,8 @@ class Config:
         # running average window
         self.average_window = 200
 
-        # Note, for a two-tailed-test 95% confidence interval:
-        alpha = 1 - 0.95
+        # Note, for a two-tailed-test 92% confidence interval:
+        alpha = 1 - 0.92
         self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
 
     @staticmethod
