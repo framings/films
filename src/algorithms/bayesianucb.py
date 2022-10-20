@@ -15,13 +15,19 @@ class BayesianUCB:
     Class: BayesianUCB
     """
 
-    def __init__(self, data: pd.DataFrame):
+    def __init__(self,
+                 data: pd.DataFrame,
+                 args: collections.namedtuple(typename='Arguments',
+                                              field_names=['slate_size', 'batch_size', 'average_window'])):
         """
 
         :param data:
         """
 
         self.data = data
+        self.args = args
+
+        # arms
         self.arms = self.data['movieId'].unique()
 
         configurations = config.Config()
