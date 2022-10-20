@@ -1,8 +1,10 @@
 """
 Module: config - the configuration file
 """
-import os
 import collections
+import os
+
+import scipy.stats
 
 
 class Config:
@@ -24,9 +26,8 @@ class Config:
         self.average_window = 200
 
         # Note, for a two-tailed-test 95% confidence interval:
-        # alpha = 1 - 0.95
-        # self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
-        self.critical_value = 1.5
+        alpha = 1 - 0.95
+        self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
 
     @staticmethod
     def models():
