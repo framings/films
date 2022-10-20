@@ -24,9 +24,7 @@ class BayesianUCB:
         # slate_size, batch_size, average_window
         self.args = config.Config().hyperparameters()
 
-        # Note, for a two-tailed-test 95% confidence interval:
-        # alpha = 1 - 0.95
-        # self.critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
+        # Note, for a two-tailed-test X% confidence interval: alpha = 1 - X/100
         __alpha = 1 - np.arange(start=0.95, stop=0.99, step=0.01)
         self.__critical_value = [scipy.stats.norm.ppf(q=(1 - alpha/2)) for alpha in __alpha]
 
