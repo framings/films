@@ -1,5 +1,5 @@
 """
-Module: epsilon greedy
+Module: epsilongreedy
 """
 import collections
 import logging
