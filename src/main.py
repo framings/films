@@ -4,6 +4,7 @@ Module: main
 import logging
 import os
 import sys
+import scipy.stats
 
 
 def main():
@@ -29,7 +30,7 @@ def main():
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     logger.info(f'Running Average Scores:\n{scores.running}')
 
-    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, args=args).exc(epsilon=0.1)
+    scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, args=args).exc(epsilon=epsilon)
     logger.info(scores.tail())
 
     scores = src.algorithms.ucb.UCB(data=preprocessed).exc()
@@ -37,7 +38,7 @@ def main():
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     logger.info(f'Running Average Scores:\n{scores.running}')
 
-    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=1.96)
+    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=critical_value)
     logger.info(scores.tail())
     
 
@@ -63,6 +64,14 @@ if __name__ == '__main__':
     import src.algorithms.ucb
     import config
 
+    # configurations
     args = config.Config().models()
+
+    # bayesian UCB: for a two-tailed-test 92% confidence interval
+    alpha = 1 - 0.92
+    critical_value = scipy.stats.norm.ppf(q=(1 - alpha/2))
+
+    # epsilon greedy
+    epsilon = 0.1
 
     main()
