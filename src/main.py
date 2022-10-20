@@ -39,7 +39,7 @@ def main():
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     logger.info(f'Running Average Scores:\n{scores.running}')
 
-    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=critical_value)
+    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=1.96)
     logger.info(f'Bayesian UCB\nRewards: {len(scores.rewards)}')
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     logger.info(f'Running Average Scores:\n{scores.running}')
@@ -67,8 +67,6 @@ if __name__ == '__main__':
     import src.algorithms.ucb
     import config
 
-    configurations = config.Config()
-    args = configurations.models()
-    critical_value = configurations.critical_value
+    args = config.Config().models()
 
     main()
