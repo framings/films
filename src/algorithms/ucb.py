@@ -1,12 +1,19 @@
-
+"""
+Module: ucb
+"""
 import collections
 import logging
 
 import numpy as np
 import pandas as pd
 
+import src.functions.replay
+
 
 class UCB:
+    """
+    Class: UCB
+    """
 
     def __init__(self, 
                  data: pd.DataFrame,
@@ -15,10 +22,12 @@ class UCB:
         """
 
         :param data:
+        :param args:
         """
 
         self.data = data
         self.args = args
+        self.replay = src.functions.replay.Replay(data=self.data, args=self.args)
         
         # arms
         self.arms = self.data['movieId'].unique()
@@ -28,10 +37,7 @@ class UCB:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
-        # rewards
-        self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
-
-    def score(self, history: pd.DataFrame, boundary: int):
+    def score(self, history: pd.DataFrame, boundary: int) -> pd.DataFrame:
         """
 
         :return:
@@ -52,22 +58,11 @@ class UCB:
         REPLAY ->
         '''
 
-        # the latest actions set starts from the latest lower boundary, and has self.args.batch_size records
-        actions = self.data[boundary:(boundary + self.args.batch_size)]
+        history = self.replay.exc(history=history, boundary=boundary, recommendations=recommendations)
 
-        # the intersection of actions & recommendations via `movieId`
-        actions = actions.copy().loc[actions['movieId'].isin(recommendations), :]
+        return history
 
-        # labelling the actions
-        actions['scoring_round'] = boundary
-
-        # in summary
-        history = pd.concat([history, actions], axis=0)
-        action_score = actions[['movieId', 'liked']]
-
-        return history, action_score
-
-    def exc(self):
+    def exc(self) -> pd.DataFrame:
         """
 
         :return:
@@ -77,24 +72,20 @@ class UCB:
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
 
-        # rewards
-        rewards = []
-
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # temporary break point
-            if index > 9999:
+            if index > 1000000:
                 break
 
             # hence
             boundary = index * self.args.batch_size
-            history, action_score = self.score(history=history, boundary=boundary)
-            if action_score is not None:
-                values = action_score['liked'].tolist()
-                rewards.extend(values)
+            history = self.score(history=history, boundary=boundary)
 
-        # metrics
-        cumulative = np.cumsum(rewards, dtype='float64')
-        running = pd.Series(rewards).rolling(window=self.args.average_window).mean().iloc[self.args.average_window:].values
+        # in summary
+        # ... the raw <rewards> values are the values of field <liked>
+        # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
+        history['cumulative'] = history['liked'].cumsum(axis=0)
+        history['MA'] = history['liked'].rolling(window=self.args.average_window).mean()
 
-        return self.Rewards(rewards=rewards, cumulative=cumulative, running=running)
+        return history
