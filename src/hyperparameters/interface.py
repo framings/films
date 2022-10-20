@@ -11,11 +11,11 @@ def main():
     logger.info('hyperparameters')
 
     # the data
-    data = src.data.films.Films().exc()
-    logger.info(f"USERS: {data['userId'].unique().shape}")
+    source = src.data.films.Films().exc()
+    logger.info(f"USERS: {source['userId'].unique().shape}")
 
     # preprocessing
-    preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=1500)
+    preprocessed = src.data.preprocessing.Preprocessing().exc(data=source, limit=1500)
     logger.info('\nPreprocessed:\n')
     logger.info(preprocessed.info())
 
@@ -24,7 +24,7 @@ def main():
     history = pd.concat(histories)
     logger.info(history)
 
-    # metrics
+    # ... metrics
     # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.max.html
     # by default Skip NaN = True
     metrics = history[['epsilon', 'liked', 'MA']].groupby(by='epsilon').agg(average=('liked', 'mean'),
@@ -32,6 +32,11 @@ def main():
                                                                             max_moving_average=('MA', 'last'))
     metrics.reset_index(drop=False, inplace=True)
     logger.info(metrics)
+
+    # bayesian UCB
+    histories = src.hyperparameters.bayesianucb.BayesianUCB(data=preprocessed).exc()
+    history = pd.concat(histories)
+    logger.info(history)
 
 
 if __name__ == '__main__':
@@ -49,5 +54,6 @@ if __name__ == '__main__':
     import src.data.films
     import src.data.preprocessing
     import src.hyperparameters.epsilongreedy
+    import src.hyperparameters.bayesianucb
 
     main()
