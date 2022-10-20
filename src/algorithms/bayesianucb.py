@@ -1,5 +1,5 @@
 """
-Module: bayesian UCB
+Module: bayesianucb
 """
 import collections
 import logging
@@ -88,7 +88,7 @@ class BayesianUCB:
             boundary = index * self.args.batch_size
             history = self.score(history=history, boundary=boundary, critical_value=critical_value)
 
-        # In summary
+        # in summary
         # ... the raw <rewards> values are the values of field <liked>
         # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
         history['critical_value'] = critical_value
