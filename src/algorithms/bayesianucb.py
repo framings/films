@@ -39,7 +39,7 @@ class BayesianUCB:
         # rewards
         self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
 
-    def score(self, history: pd.DataFrame, boundary: int, critical_value: float):
+    def score(self, history: pd.DataFrame, boundary: int, critical_value: float) -> pd.DataFrame:
         """
         A reference for scores['ucb'] formula: https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm
 
@@ -71,7 +71,7 @@ class BayesianUCB:
 
         return history
 
-    def exc(self, critical_value: float):
+    def exc(self, critical_value: float) -> pd.DataFrame:
         """
 
         :return:
