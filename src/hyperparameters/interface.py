@@ -1,4 +1,6 @@
-
+"""
+Module interface for running the optimal hyperparameter search programs
+"""
 import logging
 import os
 import sys
@@ -7,36 +9,49 @@ import pandas as pd
 
 
 def main():
+    """
+
+    :return:
+    """
 
     logger.info('hyperparameters')
 
-    # the data
+    '''
+    The Data
+    '''
+
     source = src.data.films.Films().exc()
     logger.info(f"USERS: {source['userId'].unique().shape}")
 
-    # preprocessing
     preprocessed = src.data.preprocessing.Preprocessing().exc(data=source, limit=1500)
     logger.info('\nPreprocessed:\n')
     logger.info(preprocessed.info())
 
-    # epsilon greedy
+    '''
+    Epsilon Greedy
+    '''
     histories = src.hyperparameters.epsilongreedy.EpsilonGreedy(data=preprocessed).exc()
     history = pd.concat(histories)
     logger.info(history)
 
-    # ... metrics
-    # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.max.html
-    # by default Skip NaN = True
     metrics = history[['epsilon', 'liked', 'MA']].groupby(by='epsilon').agg(average=('liked', 'mean'),
                                                                             N=('liked', 'count'),
                                                                             max_moving_average=('MA', 'last'))
     metrics.reset_index(drop=False, inplace=True)
     logger.info(metrics)
 
-    # bayesian UCB
+    '''
+    Bayesian UCB
+    '''
     histories = src.hyperparameters.bayesianucb.BayesianUCB(data=preprocessed).exc()
     history = pd.concat(histories)
     logger.info(history)
+
+    metrics = history[['epsilon', 'liked', 'MA']].groupby(by='epsilon').agg(average=('liked', 'mean'),
+                                                                            N=('liked', 'count'),
+                                                                            max_moving_average=('MA', 'last'))
+    metrics.reset_index(drop=False, inplace=True)
+    logger.info(metrics)
 
 
 if __name__ == '__main__':
