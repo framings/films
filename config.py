@@ -4,8 +4,6 @@ Module: config - the configuration file
 import collections
 import os
 
-import scipy.stats
-
 
 class Config:
 
