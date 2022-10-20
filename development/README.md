@@ -17,20 +17,16 @@ pylint --generate-rcfile > .pylintrc
 
 The requirements summary, using [filter.txt](../docs/filter.txt), is created via
 
-> pip freeze -r docs/filter.txt > requirements.txt
+````shell
+pip freeze -r docs/filter.txt > requirements.txt
+````
 
 <br>
 <br>
 
-### GitHub Actions
+### Tools
 
-Upcoming.
-
-<br>
-
-**Tool options**, and a few command examples:
-
-&nbsp; &nbsp; **PyTest**
+**PyTest**
 
 ```shell
 python -m pytest ...
@@ -38,7 +34,7 @@ python -m pytest ...
 
 <br>
 
-&nbsp; &nbsp; **PyTest & Coverage**
+**PyTest & Coverage**
 
 ```shell
 python -m pytest --cov-report term-missing --cov src/data tests/data
@@ -46,7 +42,7 @@ python -m pytest --cov-report term-missing --cov src/data tests/data
 
 <br>
 
-&nbsp; &nbsp; **Pylint**
+**Pylint**
 
 ```shell
 python -m pylint --rcfile .pylintrc src/data
@@ -65,7 +61,7 @@ logger.info('\n{}'.format(data.info()))
 ```
 <br>
 
-&nbsp; &nbsp; **flake8**
+**flake8**
 
 ```shell
 # logic
@@ -79,7 +75,7 @@ python -m flake8 --count --exit-zero --max-complexity=10 --max-line-length=127
 <br>
 <br>
 
-## References
+### References
 
 * Requests
   * https://docs.python-requests.org/en/master/index.html
