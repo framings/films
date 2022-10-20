@@ -34,10 +34,8 @@ def main():
     scores = src.algorithms.random.Random(data=preprocessed, args=args).exc()
     logger.info(scores.tail())
 
-    scores = src.algorithms.ucb.UCB(data=preprocessed).exc()
-    logger.info(f'UCB\nRewards: {len(scores.rewards)}')
-    logger.info(f'Cumulative Sums:\n{scores.cumulative}')
-    logger.info(f'Running Average Scores:\n{scores.running}')
+    scores = src.algorithms.ucb.UCB(data=preprocessed, args=args).exc()
+    logger.info(scores.tail())
 
 
 if __name__ == '__main__':
