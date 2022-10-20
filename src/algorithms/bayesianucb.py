@@ -36,9 +36,6 @@ class BayesianUCB:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
-        # rewards
-        self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
-
     def score(self, history: pd.DataFrame, boundary: int, critical_value: float) -> pd.DataFrame:
         """
         A reference for scores['ucb'] formula: https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm
