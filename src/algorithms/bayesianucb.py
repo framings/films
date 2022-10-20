@@ -28,7 +28,6 @@ class BayesianUCB:
         self.slate_size = configurations.slate_size
         self.batch_size = configurations.batch_size
         self.average_window = configurations.average_window
-        self.critical_value = configurations.critical_value
 
         # logging
         logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
@@ -38,7 +37,7 @@ class BayesianUCB:
         # rewards
         self.Rewards = collections.namedtuple(typename='Rewards', field_names=['rewards', 'cumulative', 'running'])
 
-    def score(self, history: pd.DataFrame, boundary: int):
+    def score(self, history: pd.DataFrame, boundary: int, critical_value: float):
         """
         A reference for scores['ucb'] formula: https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm
 
@@ -55,7 +54,7 @@ class BayesianUCB:
             scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
                                                                              count=('liked', 'count'),
                                                                              std=('liked', 'std'))
-            scores['ucb'] = scores['mean'] + np.true_divide(self.critical_value * scores['std'], np.sqrt(scores['count']))
+            scores['ucb'] = scores['mean'] + np.true_divide(critical_value * scores['std'], np.sqrt(scores['count']))
 
             scores['movieId'] = scores.index
             scores = scores.sort_values('ucb', ascending=False)
@@ -80,7 +79,7 @@ class BayesianUCB:
 
         return history, action_score
 
-    def exc(self):
+    def exc(self, critical_value: float):
         """
 
         :return:
@@ -101,7 +100,7 @@ class BayesianUCB:
 
             # hence
             boundary = index * self.batch_size
-            history, action_score = self.score(history=history, boundary=boundary)
+            history, action_score = self.score(history=history, boundary=boundary, critical_value=critical_value)
             if action_score is not None:
                 values = action_score['liked'].tolist()
                 rewards.extend(values)
