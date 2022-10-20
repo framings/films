@@ -26,7 +26,7 @@ class BayesianUCB:
         self.args = config.Config().hyperparameters()
 
         # Note, for a two-tailed-test X% confidence interval: alpha = 1 - X/100
-        self.__alpha = 1 - np.arange(start=0.90, stop=0.97, step=0.01)
+        self.__alpha = 1 - np.linspace(start=0.90, stop=0.99, num=10, endpoint=True)
         self.__critical_value = [scipy.stats.norm.ppf(q=(1 - alpha/2)) for alpha in self.__alpha]
         self.__bayesianucb = src.algorithms.bayesianucb.BayesianUCB(data=self.data, args=self.args)
 
