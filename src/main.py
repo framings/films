@@ -25,12 +25,13 @@ def main():
     logger.info(f'Initial: {initial.shape}')
 
     # algorithms
-    scores = src.algorithms.random.Random(data=preprocessed, args=args).exc()
-    logger.info(f'Random\nRewards: {len(scores.rewards)}')
-    logger.info(f'Cumulative Sums:\n{scores.cumulative}')
-    logger.info(f'Running Average Scores:\n{scores.running}')
+    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=critical_value)
+    logger.info(scores.tail())
 
     scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, args=args).exc(epsilon=epsilon)
+    logger.info(scores.tail())
+
+    scores = src.algorithms.random.Random(data=preprocessed, args=args).exc()
     logger.info(scores.tail())
 
     scores = src.algorithms.ucb.UCB(data=preprocessed).exc()
@@ -38,9 +39,6 @@ def main():
     logger.info(f'Cumulative Sums:\n{scores.cumulative}')
     logger.info(f'Running Average Scores:\n{scores.running}')
 
-    scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=critical_value)
-    logger.info(scores.tail())
-    
 
 if __name__ == '__main__':
 
