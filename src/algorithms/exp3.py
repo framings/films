@@ -95,7 +95,9 @@ class EXP3:
             focus['state'] = focus['movieId'].array.isin(excerpt['movieId'])
             focus = focus.merge(excerpt, on='movieId', how='left')
             focus['fraction'] = self.__fraction(state=focus['state'], value=focus['value'], probability=focus['probability'])
-            focus['weight'].array * np.exp(gamma * focus['fraction'] / focus.shape[0])
+            focus['weight'] = focus['weight'].array * np.exp(gamma * focus['fraction'] / focus.shape[0])
+
+            self.logger.info(focus.index[focus['state']])
 
     def exc(self, gamma: float):
         """
