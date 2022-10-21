@@ -117,14 +117,13 @@ class EXP3:
         history = history.astype(self.data.dtypes.to_dict())
 
         # initial weights - a list of ones of length self.arms.shape[0]
-        factors = pd.DataFrame(data={'movieID': self.arms,
-                                     'weight': [1.0] * self.arms.shape[0],
+        factors = pd.DataFrame(data={'movieID': self.arms, 'weight': [1.0] * self.arms.shape[0],
                                      'probability': [0.0] * self.arms.shape[0]})
 
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # temporary break point
-            if index > 100000:
+            if index > 500:
                 break
 
             # hence
