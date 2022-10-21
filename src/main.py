@@ -20,10 +20,9 @@ def main():
     logger.info('\nPreprocessed:\n')
     logger.info(preprocessed.info())
 
-    sample = [1] * preprocessed['movieId'].unique().shape[0]
-    logger.info(type([1]))
-    logger.info(preprocessed['movieId'].unique().shape[0])
-    logger.info(sample)
+    # testing
+    scores = src.algorithms.exp3.EXP3(data=preprocessed, args=args).exc(gamma=0.1)
+    logger.info(scores)
 
     '''
     # an option
@@ -65,6 +64,7 @@ if __name__ == '__main__':
     import src.algorithms.random
     import src.algorithms.epsilongreedy
     import src.algorithms.ucb
+    import src.algorithms.exp3
     import config
 
     # configurations
