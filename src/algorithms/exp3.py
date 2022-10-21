@@ -35,6 +35,15 @@ class EXP3:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
+    @staticmethod
+    def __probabilities(weights: list, gamma: float):
+
+        total = float(sum(weights))
+        length = len(weights)
+        def __probability(weight): return (1.0 - gamma) * (weight / total) + (gamma / length)
+
+        return [__probability(weight=weight) for weight in weights]
+
     def __draw(self, probabilities):
 
         recommendations = self.rng.choice(a=self.arms, size=self.args.slate_size, p=probabilities, replace=False)
