@@ -52,6 +52,9 @@ class EXP3:
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
 
+        # initial weights - a list of ones of length self.arms.shape[0]
+        weights = [1.0] * self.arms.shape[0]
+
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # temporary break point
