@@ -21,6 +21,7 @@ def main():
     logger.info(preprocessed.info())
 
     sample = [1] * preprocessed['movieId'].unique().shape[0]
+    logger.info(type([1]))
     logger.info(preprocessed['movieId'].unique().shape[0])
     logger.info(sample)
 
