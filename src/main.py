@@ -20,6 +20,11 @@ def main():
     logger.info('\nPreprocessed:\n')
     logger.info(preprocessed.info())
 
+    sample = [1] * preprocessed['movieId'].unique().shape[0]
+    logger.info(preprocessed['movieId'].unique().shape[0])
+    logger.info(sample)
+
+    '''
     # an option
     initial = src.functions.initial.Initial(preprocessed=preprocessed).exc()
     logger.info(f'Initial: {initial.shape}')
@@ -36,6 +41,7 @@ def main():
 
     scores = src.algorithms.ucb.UCB(data=preprocessed, args=args).exc()
     logger.info(scores.tail())
+    '''
 
 
 if __name__ == '__main__':
