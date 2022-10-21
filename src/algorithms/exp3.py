@@ -89,18 +89,13 @@ class EXP3:
         if actions.empty:
             return factors
         else:
+            focus = factors.copy()
             excerpt = actions[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
             excerpt.reset_index(drop=False, inplace=True)
-            factors['state'] = factors['movieId'].array.isin(excerpt['movieId'])
-            factors.merge(excerpt, on='movieId', how='left')
-            factors['fraction'] = self.__fraction(state=factors['state'], value=factors['value'], probability=factors['probability'])
-
-
-
-
-
-
-
+            focus['state'] = focus['movieId'].array.isin(excerpt['movieId'])
+            focus = focus.merge(excerpt, on='movieId', how='left')
+            focus['fraction'] = self.__fraction(state=focus['state'], value=focus['value'], probability=focus['probability'])
+            focus['weight'] * np.exp(gamma * focus['fraction'] / focus.shape[0])
 
     def exc(self, gamma: float):
         """
