@@ -69,7 +69,8 @@ class EXP3:
 
         return history, factors
 
-    def __fraction(self, state: bool, value: float, probability: float):
+    @staticmethod
+    def __fraction(state: bool, value: float, probability: float):
 
         if state:
             return value/probability
