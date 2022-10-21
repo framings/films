@@ -69,15 +69,37 @@ class EXP3:
 
         return history, factors
 
-    def __update(self, weights, probabilities, actions, gamma):
+    def __fraction(self, state: bool, value: float, probability: float):
+
+        if state:
+            return value/probability
+        else:
+            return 0.0
+
+    def __update(self, factors: pd.DataFrame, actions: pd.DataFrame, gamma: float):
         """
 
-        :param weights:
-        :param probabilities:
+        :param factors:
         :param actions:
         :param gamma:
         :return:
         """
+
+        if actions.empty:
+            return factors
+        else:
+            excerpt = actions[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
+            excerpt.reset_index(drop=False, inplace=True)
+            factors['state'] = factors['movieId'].array.isin(excerpt['movieId'])
+            factors.merge(excerpt, on='movieId', how='left')
+            self.__fraction(state=factors['state'], value=factors['value'], probability=factors['probability'])
+
+
+
+
+
+
+
 
     def exc(self, gamma: float):
         """
@@ -93,7 +115,8 @@ class EXP3:
         # initial weights - a list of ones of length self.arms.shape[0]
         factors = pd.DataFrame(data={'movieID': self.arms,
                                      'weight': [1.0] * self.arms.shape[0],
-                                     'probability': [0.0] * self.arms.shape[0]})
+                                     'probability': [0.0] * self.arms.shape[0],
+                                     'state': False})
 
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
