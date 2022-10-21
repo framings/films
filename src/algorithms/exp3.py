@@ -123,4 +123,5 @@ class EXP3:
 
             # hence
             boundary = index * self.args.batch_size
-            self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
+            history, factors = self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
+            self.__update(factors=factors, actions=history[history['scoring_round'] == boundary], gamma=gamma)
