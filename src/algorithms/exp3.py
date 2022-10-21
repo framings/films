@@ -95,7 +95,7 @@ class EXP3:
             focus['state'] = focus['movieId'].array.isin(excerpt['movieId'])
             focus = focus.merge(excerpt, on='movieId', how='left')
             focus['fraction'] = self.__fraction(state=focus['state'], value=focus['value'], probability=focus['probability'])
-            focus['weight'] * np.exp(gamma * focus['fraction'] / focus.shape[0])
+            focus['weight'].array * np.exp(gamma * focus['fraction'] / focus.shape[0])
 
     def exc(self, gamma: float):
         """
@@ -111,8 +111,7 @@ class EXP3:
         # initial weights - a list of ones of length self.arms.shape[0]
         factors = pd.DataFrame(data={'movieID': self.arms,
                                      'weight': [1.0] * self.arms.shape[0],
-                                     'probability': [0.0] * self.arms.shape[0],
-                                     'state': False})
+                                     'probability': [0.0] * self.arms.shape[0]})
 
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
