@@ -36,28 +36,30 @@ class EXP3:
         self.logger = logging.getLogger(__name__)
 
     @staticmethod
-    def __probabilities(weights: list, gamma: float):
+    def __probabilities(weights: pd.Series, gamma: float):
 
-        total = float(sum(weights))
-        length = len(weights)
-        def __probability(weight): return (1.0 - gamma) * (weight / total) + (gamma / length)
+        total: float = weights.sum()
+        length: int = weights.shape[0]
+        quotient: float = gamma / length
 
-        return [__probability(weight=weight) for weight in weights]
+        calculations: pd.Series = (1.0 - gamma) * weights.divide(total) + quotient
 
-    def __draw(self, probabilities):
+        return calculations.array
 
-        recommendations = self.rng.choice(a=self.arms, size=self.args.slate_size, p=probabilities, replace=False)
+    def __draw(self, factors: pd.DataFrame):
+
+        recommendations = self.rng.choice(a=factors['movieID'], size=self.args.slate_size, p=factors['probability'], replace=False)
 
         return recommendations
 
-    def score(self, history: pd.DataFrame, boundary: int, weights: list, gamma: float):
+    def score(self, history: pd.DataFrame, factors: pd.DataFrame, boundary: int, gamma: float):
         """
 
         :return:
         """
 
-        probabilities = self.__probabilities(weights=weights, gamma=gamma)
-        recommendations = self.__draw(probabilities=probabilities)
+        factors[:, 'probability'] = self.__probabilities(weights=factors['weight'], gamma=gamma)
+        recommendations = self.__draw(factors=factors)
 
         '''
         REPLAY ->
@@ -65,7 +67,17 @@ class EXP3:
 
         history = self.replay.exc(history=history.copy(), boundary=boundary, recommendations=recommendations)
 
-        return history
+        return history, factors
+
+    def __update(self, weights, probabilities, actions, gamma):
+        """
+
+        :param weights:
+        :param probabilities:
+        :param actions:
+        :param gamma:
+        :return:
+        """
 
     def exc(self, gamma: float):
         """
@@ -79,7 +91,9 @@ class EXP3:
         history = history.astype(self.data.dtypes.to_dict())
 
         # initial weights - a list of ones of length self.arms.shape[0]
-        weights = [1.0] * self.arms.shape[0]
+        factors = pd.DataFrame(data={'movieID': self.arms,
+                                     'weight': [1.0] * self.arms.shape[0],
+                                     'probability': [0.0] * self.arms.shape[0]})
 
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
