@@ -59,6 +59,14 @@ class EXP3:
         probabilities = self.__probabilities(weights=weights, gamma=gamma)
         recommendations = self.__draw(probabilities=probabilities)
 
+        '''
+        REPLAY ->
+        '''
+
+        history = self.replay.exc(history=history.copy(), boundary=boundary, recommendations=recommendations)
+
+        return history
+
     def exc(self, gamma: float):
         """
 
