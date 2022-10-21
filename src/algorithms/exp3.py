@@ -50,6 +50,15 @@ class EXP3:
 
         return recommendations
 
+    def score(self, history: pd.DataFrame, boundary: int, weights: list, gamma: float):
+        """
+
+        :return:
+        """
+
+        probabilities = self.__probabilities(weights=weights, gamma=gamma)
+        recommendations = self.__draw(probabilities=probabilities)
+
     def exc(self, gamma: float):
         """
 
