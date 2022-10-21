@@ -48,7 +48,9 @@ class EXP3:
 
     def __draw(self, factors: pd.DataFrame):
 
-        recommendations = self.rng.choice(a=factors['movieID'], size=self.args.slate_size, p=factors['probability'], replace=False)
+        recommendations = self.rng.choice(a=factors['movieID'],
+                                          size=self.args.slate_size, p=factors['probability'],
+                                          replace=False)
 
         return recommendations
 
@@ -101,7 +103,7 @@ class EXP3:
             factors.loc[indices, 'weight'] = focus.loc[indices, 'weight'].array
 
             self.logger.info(focus.index[focus['state']])
-            self.logger.info(focus.iloc[indices,])
+            self.logger.info(focus.iloc[indices, ])
 
             return factors
 
