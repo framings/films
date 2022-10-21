@@ -47,3 +47,16 @@ class EXP3:
         :param gamma:
         :return:
         """
+
+        # the empty history data frame - consider appending a <scoring_round> field
+        history = pd.DataFrame(data=None, columns=self.data.columns)
+        history = history.astype(self.data.dtypes.to_dict())
+
+        for index in range((self.data.shape[0] // self.args.batch_size)):
+
+            # temporary break point
+            if index > 100000:
+                break
+
+            # hence
+            boundary = index * self.args.batch_size
