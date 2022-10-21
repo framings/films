@@ -93,7 +93,7 @@ class EXP3:
             excerpt.reset_index(drop=False, inplace=True)
             factors['state'] = factors['movieId'].array.isin(excerpt['movieId'])
             factors.merge(excerpt, on='movieId', how='left')
-            self.__fraction(state=factors['state'], value=factors['value'], probability=factors['probability'])
+            factors['fraction'] = self.__fraction(state=factors['state'], value=factors['value'], probability=factors['probability'])
 
 
 
