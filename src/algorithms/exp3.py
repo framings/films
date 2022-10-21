@@ -130,4 +130,10 @@ class EXP3:
             # hence
             boundary = index * self.args.batch_size
             history, factors = self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
-            self.__update(factors=factors, actions=history[history['scoring_round'] == boundary], gamma=gamma)
+            factors = self.__update(factors=factors, actions=history[history['scoring_round'] == boundary], gamma=gamma)
+
+        history['gamma'] = gamma
+        history['cumulative'] = history['liked'].cumsum(axis=0)
+        history['MA'] = history['liked'].rolling(window=self.args.average_window).mean()
+
+        return history
