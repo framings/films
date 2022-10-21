@@ -48,7 +48,7 @@ class EXP3:
 
     def __draw(self, factors: pd.DataFrame):
 
-        recommendations = self.rng.choice(a=factors['movieID'],
+        recommendations = self.rng.choice(a=factors['movieId'],
                                           size=self.args.slate_size, p=factors['probability'],
                                           replace=False)
 
@@ -60,7 +60,7 @@ class EXP3:
         :return:
         """
 
-        factors[:, 'probability'] = self.__probabilities(weights=factors['weight'], gamma=gamma)
+        factors['probability'] = self.__probabilities(weights=factors['weight'], gamma=gamma)
         recommendations = self.__draw(factors=factors)
 
         '''
@@ -72,12 +72,9 @@ class EXP3:
         return history, factors
 
     @staticmethod
-    def __fraction(state: bool, value: float, probability: float):
+    def __fraction(value: float, probability: float):
 
-        if state:
-            return value/probability
-        else:
-            return 0.0
+        return np.where(np.isnan(value), 0, value/probability)
 
     def __update(self, factors: pd.DataFrame, actions: pd.DataFrame, gamma: float):
         """
@@ -94,9 +91,14 @@ class EXP3:
             focus = factors.copy()
             excerpt = actions[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
             excerpt.reset_index(drop=False, inplace=True)
-            focus['state'] = focus['movieId'].array.isin(excerpt['movieId'])
+
+            focus['state'] = focus['movieId'].isin(excerpt['movieId'].array)
             focus = focus.merge(excerpt, on='movieId', how='left')
-            focus['fraction'] = self.__fraction(state=focus['state'], value=focus['value'], probability=focus['probability'])
+            self.logger.info(focus)
+
+            focus['fraction'] = self.__fraction(value=focus['value'], probability=focus['probability'])
+            self.logger.info(focus)
+
             focus['weight'] = focus['weight'].array * np.exp(gamma * focus['fraction'] / focus.shape[0])
 
             indices = focus.index[focus['state']]
@@ -119,7 +121,7 @@ class EXP3:
         history = history.astype(self.data.dtypes.to_dict())
 
         # initial weights - a list of ones of length self.arms.shape[0]
-        factors = pd.DataFrame(data={'movieID': self.arms, 'weight': [1.0] * self.arms.shape[0],
+        factors = pd.DataFrame(data={'movieId': self.arms, 'weight': [1.0] * self.arms.shape[0],
                                      'probability': [0.0] * self.arms.shape[0]})
 
         for index in range((self.data.shape[0] // self.args.batch_size)):
