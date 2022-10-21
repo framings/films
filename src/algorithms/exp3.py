@@ -97,7 +97,13 @@ class EXP3:
             focus['fraction'] = self.__fraction(state=focus['state'], value=focus['value'], probability=focus['probability'])
             focus['weight'] = focus['weight'].array * np.exp(gamma * focus['fraction'] / focus.shape[0])
 
+            indices = focus.index[focus['state']]
+            factors.loc[indices, 'weight'] = focus.loc[indices, 'weight'].array
+
             self.logger.info(focus.index[focus['state']])
+            self.logger.info(focus.iloc[indices,])
+
+            return factors
 
     def exc(self, gamma: float):
         """
