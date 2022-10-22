@@ -49,8 +49,7 @@ class EXP3:
 
     def __draw(self, factors: pd.DataFrame):
 
-        recommendations = self.rng.choice(a=factors['movieId'],
-                                          size=self.args.slate_size, p=factors['probability'],
+        recommendations = self.rng.choice(a=factors['movieId'], size=self.args.slate_size, p=factors['probability'],
                                           replace=False)
 
         return recommendations
@@ -83,7 +82,9 @@ class EXP3:
         history = history.astype(self.data.dtypes.to_dict())
 
         # initial weights - a list of ones of length self.n_arms
-        factors = pd.DataFrame(data={'movieId': self.arms, 'weight': [1.0] * self.n_arms, 'probability': [0.0] * self.n_arms})
+        factors = pd.DataFrame(data={'movieId': self.arms,
+                                     'weight': [1.0] * self.n_arms,
+                                     'probability': [0.0] * self.n_arms})
 
         # learning
         for index in range((self.data.shape[0] // self.args.batch_size)):
