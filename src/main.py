@@ -26,18 +26,23 @@ def main():
 
     # algorithms
     scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=critical_value)
+    streams.write(data=scores, path=os.path.join(storage, 'bayesianUCB.csv'))
     logger.info(scores.tail())
 
     scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, args=args).exc(epsilon=epsilon)
+    streams.write(data=scores, path=os.path.join(storage, 'epsilonGreedy.csv'))
     logger.info(scores.tail())
 
     scores = src.algorithms.exp3.EXP3(data=preprocessed, args=args).exc(gamma=gamma)
+    streams.write(data=scores, path=os.path.join(storage, 'EXP3.csv'))
     logger.info(scores)
 
     scores = src.algorithms.random.Random(data=preprocessed, args=args).exc()
+    streams.write(data=scores, path=os.path.join(storage, 'random.csv'))
     logger.info(scores.tail())
 
     scores = src.algorithms.ucb.UCB(data=preprocessed, args=args).exc(scale=scale)
+    streams.write(data=scores, path=os.path.join(storage, 'UCB.csv'))
     logger.info(scores.tail())
 
 
@@ -57,6 +62,8 @@ if __name__ == '__main__':
     import src.data.films
     import src.data.preprocessing
     import src.functions.initial
+    import src.functions.directories
+    import src.functions.streams
     import src.algorithms.bayesianucb
     import src.algorithms.random
     import src.algorithms.epsilongreedy
@@ -66,6 +73,16 @@ if __name__ == '__main__':
 
     # configurations
     args = config.Config().models()
+    warehouse = config.Config().warehouse
+
+    # storing outputs
+    storage = os.path.join(warehouse, 'scores')
+    directories = src.functions.directories.Directories()
+    directories.cleanup(path=storage)
+    directories.create(path=storage)
+
+    # instances
+    streams = src.functions.streams.Streams()
 
     # bayesian UCB: for a two-tailed-test 92% confidence interval
     alpha = 1 - 0.92
