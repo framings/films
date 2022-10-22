@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 import pandas as pd
 
@@ -10,6 +12,11 @@ class EXP3:
         """
 
         self.default_fraction = 0.0
+
+        # logging
+        logging.basicConfig(level=logging.INFO, format='\n\n%(message)s\n%(asctime)s.%(msecs)03d',
+                            datefmt='%Y-%m-%d %H:%M:%S')
+        self.logger = logging.getLogger(__name__)
 
     def __fraction(self, metric: float, probability: float):
         """
@@ -40,6 +47,7 @@ class EXP3:
             temporary['weight'] = temporary['weight'].array * np.exp(gamma * temporary['fraction'] / temporary.shape[0])
 
             indices = temporary.index[temporary['metric'].notna()]
+            self.logger.info(f'indices: {indices}')
             factors.loc[indices, 'weight'] = temporary.loc[indices, 'weight'].array
 
             return factors
