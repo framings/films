@@ -11,6 +11,12 @@ class EXP3:
 
     @staticmethod
     def __fraction(metric: float, probability: float):
+        """
+
+        :param metric:
+        :param probability:
+        :return:
+        """
 
         return np.where(np.isnan(metric), 0, metric/probability)
 
@@ -46,4 +52,4 @@ class EXP3:
         :return:
         """
 
-        return self.__update(factors = factors, latest = latest, gamma= gamma)
+        return self.__update(factors=factors, latest=latest, gamma=gamma)
