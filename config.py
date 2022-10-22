@@ -14,6 +14,9 @@ class Config:
         # the data directory
         self.data_directory = os.path.join(os.getcwd(), 'data')
 
+        # the warehouse
+        self.warehouse = os.path.join(os.getcwd(), 'warehouse')
+
         # the number film recommendations to present to a client
         self.slate_size = 5
 
