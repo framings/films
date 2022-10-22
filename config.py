@@ -35,7 +35,7 @@ class Config:
 
         Arguments = collections.namedtuple(typename='Arguments',
                                            field_names=['slate_size', 'batch_size', 'average_window'])
-        return Arguments(slate_size=5, batch_size=100, average_window=200)
+        return Arguments(slate_size=5, batch_size=250, average_window=200)
 
     @staticmethod
     def hyperparameters():
