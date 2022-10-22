@@ -81,7 +81,7 @@ class BayesianUCB:
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # temporary break point
-            if index > 100000:
+            if index > 500000:
                 break
 
             # hence
