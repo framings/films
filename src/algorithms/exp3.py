@@ -26,6 +26,7 @@ class EXP3:
 
         # arms
         self.arms = self.data['movieId'].unique()
+        self.length = self.arms.shape[0]
 
         # the random number generator instance
         self.rng = np.random.default_rng(seed=config.Config().seed)
@@ -35,16 +36,14 @@ class EXP3:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
-    @staticmethod
-    def __probabilities(weights: pd.Series, gamma: float):
+    def __probabilities(self, weights: pd.Series, gamma: float):
 
         total: float = weights.sum()
-        length: int = weights.shape[0]
-        quotient: float = gamma / length
-
+        quotient: float = gamma / self.length
         calculations: pd.Series = (1.0 - gamma) * weights.divide(total) + quotient
+        probabilities = calculations.array
 
-        return calculations.array
+        return probabilities
 
     def __draw(self, factors: pd.DataFrame):
 
@@ -68,40 +67,7 @@ class EXP3:
         # replay
         history = self.replay.exc(history=history.copy(), boundary=boundary, recommendations=recommendations)
 
-        # latest
-        latest = history[history['scoring_round'] == boundary]
-        latest = latest.copy()[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
-        latest.reset_index(drop=False, inplace=True)
-
-        return history, factors, latest
-
-    @staticmethod
-    def __fraction(value: float, probability: float):
-
-        return np.where(np.isnan(value), 0, value/probability)
-
-    def __update(self, factors: pd.DataFrame, latest: pd.DataFrame, gamma: float):
-        """
-
-        :param factors:
-        :param latest:
-        :param gamma:
-        :return:
-        """
-
-        if latest.empty:
-            return factors
-        else:
-            temporary = factors.copy()
-            temporary['state'] = temporary['movieId'].isin(latest['movieId'].array)
-            temporary = temporary.merge(latest, on='movieId', how='left')
-            temporary['fraction'] = self.__fraction(value=temporary['value'], probability=temporary['probability'])
-            temporary['weight'] = temporary['weight'].array * np.exp(gamma * temporary['fraction'] / temporary.shape[0])
-
-            indices = temporary.index[temporary['value'].notna()]
-            factors.loc[indices, 'weight'] = temporary.loc[indices, 'weight'].array
-
-            return factors
+        return history, factors
 
     def exc(self, gamma: float):
         """
@@ -126,7 +92,14 @@ class EXP3:
 
             # hence
             boundary = index * self.args.batch_size
-            history, factors, latest = self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
+            history, factors= self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
+
+            # latest
+            latest = history[history['scoring_round'] == boundary]
+            latest = latest.copy()[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
+            latest.reset_index(drop=False, inplace=True)
+
+            # update
             factors = self.__update(factors=factors, latest=latest, gamma=gamma)
             self.logger.info(f"Latest:\n {latest}")
 
