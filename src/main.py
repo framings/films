@@ -12,23 +12,17 @@ def main():
     logger.info('films')
 
     # the data
-    data = src.data.films.Films().exc()
-    logger.info(f"USERS: {data['userId'].unique().shape}")
+    source = src.data.films.Films().exc()
+    logger.info(f"USERS: {source['userId'].unique().shape}")
 
     # preprocessing
-    preprocessed = src.data.preprocessing.Preprocessing().exc(data=data, limit=1500)
+    preprocessed = src.data.preprocessing.Preprocessing().exc(data=source, limit=1500)
     logger.info('\nPreprocessed:\n')
     logger.info(preprocessed.info())
 
-    # testing
-    scores = src.algorithms.exp3.EXP3(data=preprocessed, args=args).exc(gamma=0.1)
-    logger.info(scores)
-    logger.info(scores['MA'].array)
-
-    '''
-    # an option
-    initial = src.functions.initial.Initial(preprocessed=preprocessed).exc()
-    logger.info(f'Initial: {initial.shape}')
+    # initial history
+    # initial = src.functions.initial.Initial(preprocessed=preprocessed).exc()
+    # logger.info(f'Initial: {initial.shape}')
 
     # algorithms
     scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=critical_value)
@@ -37,12 +31,14 @@ def main():
     scores = src.algorithms.epsilongreedy.EpsilonGreedy(data=preprocessed, args=args).exc(epsilon=epsilon)
     logger.info(scores.tail())
 
+    scores = src.algorithms.exp3.EXP3(data=preprocessed, args=args).exc(gamma=gamma)
+    logger.info(scores)
+
     scores = src.algorithms.random.Random(data=preprocessed, args=args).exc()
     logger.info(scores.tail())
 
-    scores = src.algorithms.ucb.UCB(data=preprocessed, args=args).exc()
+    scores = src.algorithms.ucb.UCB(data=preprocessed, args=args).exc(scale=scale)
     logger.info(scores.tail())
-    '''
 
 
 if __name__ == '__main__':
@@ -77,5 +73,11 @@ if __name__ == '__main__':
 
     # epsilon greedy
     epsilon = 0.1
+
+    # EXP3
+    gamma = 0.1
+
+    # UCB
+    scale = 2.0
 
     main()
