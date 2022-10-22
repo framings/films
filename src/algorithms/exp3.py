@@ -28,7 +28,7 @@ class EXP3:
 
         # arms
         self.arms = self.data['movieId'].unique()
-        self.length = self.arms.shape[0]
+        self.n_arms = self.arms.shape[0]
 
         # the random number generator instance
         self.rng = np.random.default_rng(seed=config.Config().seed)
@@ -41,7 +41,7 @@ class EXP3:
     def __probabilities(self, weights: pd.Series, gamma: float):
 
         total: float = weights.sum()
-        quotient: float = gamma / self.length
+        quotient: float = gamma / self.n_arms
         calculations: pd.Series = (1.0 - gamma) * weights.divide(total) + quotient
         probabilities = calculations.array
 
@@ -82,10 +82,10 @@ class EXP3:
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
 
-        # initial weights - a list of ones of length self.arms.shape[0]
-        factors = pd.DataFrame(data={'movieId': self.arms, 'weight': [1.0] * self.arms.shape[0],
-                                     'probability': [0.0] * self.arms.shape[0]})
+        # initial weights - a list of ones of length self.n_arms
+        factors = pd.DataFrame(data={'movieId': self.arms, 'weight': [1.0] * self.n_arms, 'probability': [0.0] * self.n_arms})
 
+        # learning
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # temporary break point
