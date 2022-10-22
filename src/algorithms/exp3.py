@@ -99,8 +99,6 @@ class EXP3:
             temporary['weight'] = temporary['weight'].array * np.exp(gamma * temporary['fraction'] / temporary.shape[0])
 
             indices = temporary.index[temporary['value'].notna()]
-            self.logger.info(indices)
-
             factors.loc[indices, 'weight'] = temporary.loc[indices, 'weight'].array
 
             return factors
@@ -123,7 +121,7 @@ class EXP3:
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # temporary break point
-            if index > 500:
+            if index > 10000:
                 break
 
             # hence
@@ -131,8 +129,11 @@ class EXP3:
             history, factors, latest = self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
             factors = self.__update(factors=factors, latest=latest, gamma=gamma)
             self.logger.info(f"Latest:\n {latest}")
-            self.logger.info(factors)
 
+        # reviewing
+        self.logger.info(factors)
+
+        # metrics
         history['gamma'] = gamma
         history['cumulative'] = history['liked'].cumsum(axis=0)
         history['MA'] = history['liked'].rolling(window=self.args.average_window).mean()
