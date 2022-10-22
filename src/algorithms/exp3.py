@@ -68,7 +68,6 @@ class EXP3:
         # recommendations
         factors['probability'] = self.__probabilities(weights=factors['weight'], gamma=gamma)
         recommendations = self.__draw(factors=factors)
-        self.logger.info(f'Recommendations: {recommendations}')
 
         # replay
         history = self.replay.exc(history=history.copy(), boundary=boundary, recommendations=recommendations)
