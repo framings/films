@@ -10,9 +10,9 @@ class EXP3:
         """
 
     @staticmethod
-    def __fraction(value: float, probability: float):
+    def __fraction(metric: float, probability: float):
 
-        return np.where(np.isnan(value), 0, value/probability)
+        return np.where(np.isnan(metric), 0, metric/probability)
 
     def __update(self, factors: pd.DataFrame, latest: pd.DataFrame, gamma: float):
         """
@@ -29,10 +29,10 @@ class EXP3:
             temporary = factors.copy()
             temporary['state'] = temporary['movieId'].isin(latest['movieId'].array)
             temporary = temporary.merge(latest, on='movieId', how='left')
-            temporary['fraction'] = self.__fraction(value=temporary['value'], probability=temporary['probability'])
+            temporary['fraction'] = self.__fraction(metric=temporary['metric'], probability=temporary['probability'])
             temporary['weight'] = temporary['weight'].array * np.exp(gamma * temporary['fraction'] / temporary.shape[0])
 
-            indices = temporary.index[temporary['value'].notna()]
+            indices = temporary.index[temporary['metric'].notna()]
             factors.loc[indices, 'weight'] = temporary.loc[indices, 'weight'].array
 
             return factors
