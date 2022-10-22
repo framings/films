@@ -90,14 +90,14 @@ class EpsilonGreedy:
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # Temporary break point
-            if index > 100000:
+            if index > 500000:
                 break
 
             # Hence
             boundary = index * self.args.batch_size
             history = self.score(history=history, boundary=boundary, epsilon=epsilon)
 
-        # In summary
+        # in summary
         # ... the raw <rewards> values are the values of field <liked>
         # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
         history['epsilon'] = epsilon
