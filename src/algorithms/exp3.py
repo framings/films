@@ -94,7 +94,7 @@ class EXP3:
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
             # temporary break point
-            if index > 10000:
+            if index > 500000:
                 break
 
             # hence
