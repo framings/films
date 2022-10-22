@@ -101,12 +101,11 @@ class EXP3:
             latest = latest.copy()[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
             latest.reset_index(drop=False, inplace=True)
 
-            # update
+            # update weights
             factors = self.weights.exc(factors=factors, latest=latest, gamma=gamma)
-            self.logger.info(f"Latest:\n {latest}")
 
         # reviewing
-        self.logger.info(factors)
+        self.logger.info(factors['probability'].array)
 
         # metrics
         history['gamma'] = gamma
