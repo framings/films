@@ -24,7 +24,7 @@ class EXP3:
         self.data = data
         self.args = args
         self.replay = src.functions.replay.Replay(data=self.data, args=self.args)
-        self.__update = src.weights.exp3.EXP3()
+        self.weights = src.weights.exp3.EXP3()
 
         # arms
         self.arms = self.data['movieId'].unique()
@@ -102,7 +102,7 @@ class EXP3:
             latest.reset_index(drop=False, inplace=True)
 
             # update
-            factors = self.__update.exc(factors=factors, latest=latest, gamma=gamma)
+            factors = self.weights.exc(factors=factors, latest=latest, gamma=gamma)
             self.logger.info(f"Latest:\n {latest}")
 
         # reviewing
