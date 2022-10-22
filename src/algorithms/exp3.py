@@ -60,52 +60,48 @@ class EXP3:
         :return:
         """
 
+        # recommendations
         factors['probability'] = self.__probabilities(weights=factors['weight'], gamma=gamma)
         recommendations = self.__draw(factors=factors)
+        self.logger.info(f'Recommendations: {recommendations}')
 
-        '''
-        REPLAY ->
-        '''
-
+        # replay
         history = self.replay.exc(history=history.copy(), boundary=boundary, recommendations=recommendations)
 
-        return history, factors
+        # latest
+        latest = history[history['scoring_round'] == boundary]
+        latest = latest.copy()[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
+        latest.reset_index(drop=False, inplace=True)
+
+        return history, factors, latest
 
     @staticmethod
     def __fraction(value: float, probability: float):
 
         return np.where(np.isnan(value), 0, value/probability)
 
-    def __update(self, factors: pd.DataFrame, actions: pd.DataFrame, gamma: float):
+    def __update(self, factors: pd.DataFrame, latest: pd.DataFrame, gamma: float):
         """
 
         :param factors:
-        :param actions:
+        :param latest:
         :param gamma:
         :return:
         """
 
-        if actions.empty:
+        if latest.empty:
             return factors
         else:
-            focus = factors.copy()
-            excerpt = actions[['movieId', 'liked']].groupby(by='movieId').agg(value=('liked', 'mean'))
-            excerpt.reset_index(drop=False, inplace=True)
+            temporary = factors.copy()
+            temporary['state'] = temporary['movieId'].isin(latest['movieId'].array)
+            temporary = temporary.merge(latest, on='movieId', how='left')
+            temporary['fraction'] = self.__fraction(value=temporary['value'], probability=temporary['probability'])
+            temporary['weight'] = temporary['weight'].array * np.exp(gamma * temporary['fraction'] / temporary.shape[0])
 
-            focus['state'] = focus['movieId'].isin(excerpt['movieId'].array)
-            focus = focus.merge(excerpt, on='movieId', how='left')
-            self.logger.info(focus)
+            indices = temporary.index[temporary['value'].notna()]
+            self.logger.info(indices)
 
-            focus['fraction'] = self.__fraction(value=focus['value'], probability=focus['probability'])
-            self.logger.info(focus)
-
-            focus['weight'] = focus['weight'].array * np.exp(gamma * focus['fraction'] / focus.shape[0])
-
-            indices = focus.index[focus['state']]
-            factors.loc[indices, 'weight'] = focus.loc[indices, 'weight'].array
-
-            self.logger.info(focus.index[focus['state']])
-            self.logger.info(focus.iloc[indices, ])
+            factors.loc[indices, 'weight'] = temporary.loc[indices, 'weight'].array
 
             return factors
 
@@ -132,8 +128,10 @@ class EXP3:
 
             # hence
             boundary = index * self.args.batch_size
-            history, factors = self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
-            factors = self.__update(factors=factors, actions=history[history['scoring_round'] == boundary], gamma=gamma)
+            history, factors, latest = self.score(history=history, factors=factors, boundary=boundary, gamma=gamma)
+            factors = self.__update(factors=factors, latest=latest, gamma=gamma)
+            self.logger.info(f"Latest:\n {latest}")
+            self.logger.info(factors)
 
         history['gamma'] = gamma
         history['cumulative'] = history['liked'].cumsum(axis=0)
