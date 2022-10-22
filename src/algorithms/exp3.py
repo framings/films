@@ -112,7 +112,9 @@ class EXP3:
         # reviewing
         self.logger.info(factors['probability'].array)
 
-        # metrics
+        # in summary
+        # ... the raw <rewards> values are the values of field <liked>
+        # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
         history['gamma'] = gamma
         history['cumulative'] = history['liked'].cumsum(axis=0)
         history['MA'] = history['liked'].rolling(window=self.args.average_window).mean()
