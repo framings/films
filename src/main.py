@@ -23,6 +23,7 @@ def main():
     # testing
     scores = src.algorithms.exp3.EXP3(data=preprocessed, args=args).exc(gamma=0.1)
     logger.info(scores)
+    logger.info(scores['MA'].array)
 
     '''
     # an option
