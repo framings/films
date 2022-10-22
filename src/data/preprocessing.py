@@ -68,7 +68,7 @@ class Preprocessing:
         # shuffling
         restructured = data.sample(frac=1, replace=False, axis=0, random_state=self.seed)
 
-        # adding a time step field
+        # adding a time step field: herein, each time step is associated with a single record
         restructured['t'] = np.arange(stop=restructured.shape[0])
 
         # setting the index as time steps
