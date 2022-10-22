@@ -9,8 +9,9 @@ class EXP3:
 
         """
 
-    @staticmethod
-    def __fraction(metric: float, probability: float):
+        self.default_fraction = 0.0
+
+    def __fraction(self, metric: float, probability: float):
         """
 
         :param metric:
@@ -18,7 +19,7 @@ class EXP3:
         :return:
         """
 
-        return np.where(np.isnan(metric), 0, metric/probability)
+        return np.where(np.isnan(metric), self.default_fraction, metric/probability)
 
     def __update(self, factors: pd.DataFrame, latest: pd.DataFrame, gamma: float):
         """
