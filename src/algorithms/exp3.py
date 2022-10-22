@@ -39,10 +39,15 @@ class EXP3:
         self.logger = logging.getLogger(__name__)
 
     def __probabilities(self, weights: pd.Series, gamma: float):
+        """
 
-        total: float = weights.sum()
+        :param weights:
+        :param gamma:
+        :return:
+        """
+
         quotient: float = gamma / self.n_arms
-        calculations: pd.Series = (1.0 - gamma) * weights.divide(total) + quotient
+        calculations: pd.Series = (1.0 - gamma) * weights.divide(weights.sum()) + quotient
         probabilities = calculations.array
 
         return probabilities
