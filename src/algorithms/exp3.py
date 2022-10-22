@@ -103,7 +103,7 @@ class EXP3:
 
             # latest
             latest = history[history['scoring_round'] == boundary]
-            latest = latest.copy()[['movieId', 'liked']].groupby(by='movieId').agg(metric=('liked', 'mean'))
+            latest = latest.copy()[['movieId', 'liked']].groupby(by='movieId').agg(metric=('liked', 'sum'))
             latest.reset_index(drop=False, inplace=True)
 
             # update weights
