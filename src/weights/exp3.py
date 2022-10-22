@@ -1,3 +1,6 @@
+"""
+Module: weights/exp3.py
+"""
 import logging
 
 import numpy as np
@@ -5,6 +8,9 @@ import pandas as pd
 
 
 class EXP3:
+    """
+    Class: EXP3
+    """
 
     def __init__(self):
         """
@@ -31,9 +37,10 @@ class EXP3:
     def __update(self, factors: pd.DataFrame, latest: pd.DataFrame, gamma: float):
         """
 
-        :param factors:
-        :param latest:
-        :param gamma:
+        :param factors: The data frame of distinct film identification codes along with their
+                        weights & probabilities.  This program updates the weights of the films in <latest>
+        :param latest: The latest additions to history.
+        :param gamma: An algorithm constant.
         :return:
         """
 
@@ -47,7 +54,6 @@ class EXP3:
             temporary['weight'] = temporary['weight'].array * np.exp(gamma * temporary['fraction'] / temporary.shape[0])
 
             indices = temporary.index[temporary['metric'].notna()]
-            self.logger.info(f'indices: {indices}')
             factors.loc[indices, 'weight'] = temporary.loc[indices, 'weight'].array
 
             return factors
@@ -55,9 +61,10 @@ class EXP3:
     def exc(self, factors: pd.DataFrame, latest: pd.DataFrame, gamma: float):
         """
 
-        :param factors:
-        :param latest:
-        :param gamma:
+        :param factors: The data frame of distinct film identification codes along with their
+                        weights & probabilities.  This program updates the weights of the films in <latest>
+        :param latest: The latest additions to history.
+        :param gamma: An algorithm constant.
         :return:
         """
 
