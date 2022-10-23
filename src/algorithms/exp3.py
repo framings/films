@@ -59,6 +59,11 @@ class EXP3:
         return probabilities
 
     def __draw(self, factors: pd.DataFrame):
+        """
+
+        :param factors:
+        :return:
+        """
 
         recommendations = self.rng.choice(a=factors['movieId'], size=self.args.slate_size, p=factors['probability'],
                                           replace=False)
@@ -68,6 +73,10 @@ class EXP3:
     def score(self, history: pd.DataFrame, factors: pd.DataFrame, boundary: int, gamma: float):
         """
 
+        :param history:
+        :param factors:
+        :param boundary:
+        :param gamma:
         :return:
         """
 
