@@ -21,7 +21,8 @@ class BayesianUCB:
                                               field_names=['slate_size', 'batch_size', 'average_window'])):
         """
 
-        :param data:
+        :param data: The modelling data set in focus
+        :param args: The modelling arguments
         """
 
         self.data = data
