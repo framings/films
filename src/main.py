@@ -20,10 +20,6 @@ def main():
     logger.info('\nPreprocessed:\n')
     logger.info(preprocessed.info())
 
-    # initial history
-    # initial = src.functions.initial.Initial(preprocessed=preprocessed).exc()
-    # logger.info(f'Initial: {initial.shape}')
-
     # algorithms
     scores = src.algorithms.bayesianucb.BayesianUCB(data=preprocessed, args=args).exc(critical_value=critical_value)
     streams.write(data=scores, path=os.path.join(storage, 'bayesianUCB.csv'))
@@ -61,7 +57,7 @@ if __name__ == '__main__':
     # functions
     import src.data.films
     import src.data.preprocessing
-    import src.functions.initial
+    import src.data.initial
     import src.functions.directories
     import src.functions.streams
     import src.algorithms.bayesianucb
