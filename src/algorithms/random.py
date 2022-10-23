@@ -73,9 +73,8 @@ class Random:
             boundary = index * self.args.batch_size
             history = self.score(history=history, boundary=boundary)
 
-        # in summary
-        # ... the raw <rewards> values are the values of field <liked>
-        # ... therefore, the <cumulative> values are just the cumulative sum values of field <liked>
+        # Note, the raw <rewards> values are the values of field <liked>.  Therefore, the <cumulative>
+        # values are just the cumulative sum values of field <liked>
         history['cumulative'] = history['liked'].cumsum(axis=0)
         history['MA'] = history['liked'].rolling(window=self.args.average_window).mean()
 
