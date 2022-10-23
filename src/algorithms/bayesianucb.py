@@ -37,11 +37,12 @@ class BayesianUCB:
                             datefmt='%Y-%m-%d %H:%M:%S')
         self.logger = logging.getLogger(__name__)
 
-    def score(self, history: pd.DataFrame, boundary: int, critical_value: float) -> pd.DataFrame:
+    def score(self, history: pd.DataFrame, servings: pd.DataFrame, boundary: int, critical_value: float) -> (pd.DataFrame, pd.DataFrame):
         """
         A reference for scores['ucb'] formula: https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm
 
-        :param history: The history of recommenations
+        :param history: The history of recommendations
+        :param servings:
         :param boundary: The time boundary
         :param critical_value: The critical value for the Bayesian UCB recommendation algorithm
         :return:
@@ -64,12 +65,12 @@ class BayesianUCB:
 
             # The recommendations will be the top <self.args.slate_size> films w.r.t. <ucb>.
             scores = scores.sort_values('ucb', ascending=False)
-            recommendations: np.ndarray = scores.loc[scores.index[0:self.args.slate_size], 'movieId'].values
+            recommendations: np.ndarray = scores.loc[scores.index[0:self.args.slate_size], 'movieId'].array
 
         # Evaluation & history update: replay
-        history = self.replay.exc(history=history.copy(), boundary=boundary, recommendations=recommendations)
+        history, servings = self.replay.exc(history=history.copy(), servings=servings, boundary=boundary, recommendations=recommendations)
 
-        return history
+        return history, servings
 
     def exc(self, critical_value: float) -> pd.DataFrame:
         """
@@ -77,6 +78,10 @@ class BayesianUCB:
         :param critical_value: The critical value for the Bayesian UCB recommendation algorithm
         :return:
         """
+
+        # Have you been served?
+        servings = pd.DataFrame(data=None, columns=['userId', 't', 'scoring_round', 'recommendations'])
+        servings = servings.astype({'userId': 'int', 't': 'int', 'scoring_round': 'int', 'recommendations': 'int'})
 
         # The empty history data frame - consider appending a <scoring_round> field
         history = pd.DataFrame(data=None, columns=self.data.columns)
@@ -90,7 +95,7 @@ class BayesianUCB:
 
             # Hence
             boundary = index * self.args.batch_size
-            history = self.score(history=history, boundary=boundary, critical_value=critical_value)
+            history = self.score(history=history, servings=servings, boundary=boundary, critical_value=critical_value)
 
         # Note, the raw <rewards> values are the values of field <liked>.  Therefore, the <cumulative>
         # values are just the cumulative sum values of field <liked>
