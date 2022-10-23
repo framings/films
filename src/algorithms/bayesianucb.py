@@ -74,6 +74,7 @@ class BayesianUCB:
     def exc(self, critical_value: float) -> pd.DataFrame:
         """
 
+        :param critical_value: The critical value for the Bayesian UCB recommendation algorithm
         :return:
         """
 
