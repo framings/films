@@ -48,10 +48,7 @@ class Random:
         # a temporary recommendation function, it recommends self.args.slate_size films
         recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.args.slate_size, replace=False)
 
-        '''
-        REPLAY ->
-        '''
-
+        # Evaluation & history update: replay
         history = self.replay.exc(history=history, boundary=boundary, recommendations=recommendations)
 
         return history
