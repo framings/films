@@ -54,10 +54,7 @@ class UCB:
             scores = scores.sort_values('ucb', ascending=False)
             recommendations: np.ndarray = scores.loc[scores.index[0:self.args.slate_size], 'movieId'].values
 
-        '''
-        REPLAY ->
-        '''
-
+        # Evaluation & history update: replay
         history = self.replay.exc(history=history, boundary=boundary, recommendations=recommendations)
 
         return history
