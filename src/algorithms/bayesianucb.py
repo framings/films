@@ -41,9 +41,9 @@ class BayesianUCB:
         """
         A reference for scores['ucb'] formula: https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm
 
-        :param history:
-        :param boundary:
-        :param critical_value:
+        :param history: The history of recommenations
+        :param boundary: The time boundary
+        :param critical_value: The critical value for the Bayesian UCB recommendation algorithm
         :return:
         """
 
@@ -78,17 +78,17 @@ class BayesianUCB:
         :return:
         """
 
-        # the empty history data frame - consider appending a <scoring_round> field
+        # The empty history data frame - consider appending a <scoring_round> field
         history = pd.DataFrame(data=None, columns=self.data.columns)
         history = history.astype(self.data.dtypes.to_dict())
 
         for index in range((self.data.shape[0] // self.args.batch_size)):
 
-            # temporary break point
+            # A temporary break point
             if index > 500000:
                 break
 
-            # hence
+            # Hence
             boundary = index * self.args.batch_size
             history = self.score(history=history, boundary=boundary, critical_value=critical_value)
 
