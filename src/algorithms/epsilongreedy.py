@@ -23,7 +23,7 @@ class EpsilonGreedy:
         """
 
         :param data: The modelling data set in focus
-        :param args: Modelling parameters
+        :param args: The modelling arguments
         """
 
         self.data = data
