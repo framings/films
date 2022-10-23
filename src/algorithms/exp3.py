@@ -1,3 +1,6 @@
+"""
+Module: exp3
+"""
 import collections
 import logging
 
@@ -10,6 +13,9 @@ import src.weights.exp3
 
 
 class EXP3:
+    """
+    Class: EXP3
+    """
 
     def __init__(self,
                  data: pd.DataFrame,
@@ -17,8 +23,8 @@ class EXP3:
                                               field_names=['slate_size', 'batch_size', 'average_window'])):
         """
 
-        :param data:
-        :param args:
+        :param data: The modelling data set in focus
+        :param args: The modelling arguments
         """
 
         self.data = data
