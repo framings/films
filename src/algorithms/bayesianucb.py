@@ -46,17 +46,22 @@ class BayesianUCB:
         :return:
         """
 
-        # the UCB policy applies to the historic dataset prior & equal to the current step
+        # The UCB policy applies to the historic dataset prior & equal to the current step
         excerpt = history.loc[history['t'] <= boundary, ]
         if excerpt.shape[0] == 0:
+            # If an history of recommendations does not exist, randomly recommend
+            # <self.args.slate_size> films
             recommendations: np.ndarray = np.random.choice(a=self.arms, size=self.args.slate_size, replace=False)
         else:
+            # Make recommendations based on the bayesian score of each film that exists in
+            # history. The score is <ucb>.
             scores = excerpt[['movieId', 'liked']].groupby(by='movieId').agg(mean=('liked', 'mean'),
                                                                              count=('liked', 'count'),
                                                                              std=('liked', 'std'))
             scores['ucb'] = scores['mean'] + np.true_divide(critical_value * scores['std'], np.sqrt(scores['count']))
-
             scores['movieId'] = scores.index
+
+            # The recommendations will be the top <self.args.slate_size> films w.r.t. <ucb>.
             scores = scores.sort_values('ucb', ascending=False)
             recommendations: np.ndarray = scores.loc[scores.index[0:self.args.slate_size], 'movieId'].values
 
