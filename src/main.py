@@ -57,7 +57,6 @@ if __name__ == '__main__':
     # functions
     import src.data.films
     import src.data.preprocessing
-    import src.data.initial
     import src.functions.directories
     import src.functions.streams
     import src.algorithms.bayesianucb
