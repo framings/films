@@ -22,6 +22,7 @@ class Random:
         """
 
         :param data: The modelling data set in focus
+        :param args: The modelling arguments
         """
 
         self.data = data
