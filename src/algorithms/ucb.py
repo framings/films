@@ -40,6 +40,9 @@ class UCB:
     def score(self, history: pd.DataFrame, boundary: int, scale: float) -> pd.DataFrame:
         """
 
+        :param history:
+        :param boundary:
+        :param scale:
         :return:
         """
 
@@ -59,7 +62,7 @@ class UCB:
 
         return history
 
-    def exc(self, scale:float) -> pd.DataFrame:
+    def exc(self, scale: float) -> pd.DataFrame:
         """
 
         :param scale:
